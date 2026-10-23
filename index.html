@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>API Explorer</title>
+    </head>
+    <body>
+        <div class="app">
+            <aside class="sidebar">
+                <div class="tabs" role="tablist">
+                    <button data-tab="endpoints" class="active">Endpoints</button>
+                    <button data-tab="history">History</button>
+                    <button data-tab="saved">Saved</button>
+                </div>
+                <input id="filter" type="search" placeholder="Filter" />
+                <ul id="list" class="list"></ul>
+            </aside>
+
+            <main class="main">
+                <section class="request">
+                    <div class="row">
+                        <select id="api" title="API"></select>
+                        <select id="connection" title="Connection"></select>
+                    </div>
+                    <div class="row">
+                        <select id="method" title="Method">
+                            <option>GET</option>
+                            <option>POST</option>
+                            <option>PUT</option>
+                            <option>PATCH</option>
+                            <option>DELETE</option>
+                        </select>
+                        <input id="path" type="text" spellcheck="false" />
+                        <button id="send" class="primary">Send</button>
+                        <button id="save">Save</button>
+                    </div>
+                    <details>
+                        <summary>Headers (JSON)</summary>
+                        <textarea id="headers" spellcheck="false" placeholder='{ "Prefer": "odata.include-annotations=\"*\"" }'></textarea>
+                    </details>
+                    <details id="body-wrap">
+                        <summary>Body</summary>
+                        <textarea id="body" spellcheck="false"></textarea>
+                    </details>
+                </section>
+
+                <section id="docs" class="docs" hidden></section>
+
+                <section class="response">
+                    <div class="meta">
+                        <span id="status"></span>
+                        <span id="timing"></span>
+                        <button id="copy" hidden>Copy</button>
+                    </div>
+                    <details id="resp-headers-wrap" hidden>
+                        <summary>Response headers</summary>
+                        <pre id="resp-headers"></pre>
+                    </details>
+                    <pre id="output" class="output">Pick an endpoint or type a path, then Send.</pre>
+                </section>
+            </main>
+        </div>
+        <script type="module" src="./src/main.ts"></script>
+    </body>
+</html>
