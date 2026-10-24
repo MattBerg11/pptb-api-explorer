@@ -6,7 +6,8 @@ The goal is a long unattended run that ends with v1 finished. Every item can be 
 1. Sync the local folder to the `initial-scaffold` branch.
 2. Get the information right: agent skills with endpoint references, plus robust tests.
 3. Work through the rest of this checklist.
-4. Write the data freshness plan.
+
+The plan for keeping endpoint data current is handled separately (`docs/data-freshness-plan.md` in project files).
 
 ## Done when
 
@@ -30,9 +31,6 @@ The goal is a long unattended run that ends with v1 finished. Every item can be 
 - [ ] Errors shown with `toolboxAPI.utils.showNotification`, never silent
 - [ ] Saved requests can be renamed and deleted inline (no `prompt()`)
 - [ ] The tool follows PPTB theme changes while it is open
-
-**Keeping data current**
-- [ ] `docs/data-freshness-plan.md`: how the endpoint data stays up to date, with options compared and the easiest one recommended. Plan only, not built in v1.
 
 **Docs and release prep**
 - [ ] README covers features, a screenshot for each API, loading the tool locally, and known limits
