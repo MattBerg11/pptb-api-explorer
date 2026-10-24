@@ -1,0 +1,61 @@
+{
+  "name": "pptb-api-explorer",
+  "version": "0.1.0",
+  "displayName": "API Explorer",
+  "description": "Explore the Dataverse Web API and the Power Platform API from Power Platform ToolBox, plus documented SharePoint REST samples.",
+  "license": "MIT",
+  "icon": "icon.svg",
+  "contributors": [
+    {
+      "name": "Matt Berg",
+      "url": "https://github.com/mattberg11"
+    }
+  ],
+  "configurations": {
+    "website": "https://github.com/mattberg11/pptb-api-explorer",
+    "repository": "https://github.com/mattberg11/pptb-api-explorer",
+    "readmeUrl": "https://raw.githubusercontent.com/mattberg11/pptb-api-explorer/refs/heads/main/README.md"
+  },
+  "features": {
+    "connections": {
+      "min": 1,
+      "max": 2
+    }
+  },
+  "type": "module",
+  "files": [
+    "dist",
+    "npm-shrinkwrap.json"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "dev": "vite",
+    "dev-watch": "vite build --mode development --watch",
+    "preview": "vite preview",
+    "finalize-package": "npm shrinkwrap",
+    "validate": "pptb-validate"
+  },
+  "devDependencies": {
+    "@pptb/types": "^1.2.7",
+    "@pptb/validate": "^1.0.5",
+    "typescript": "^5.6.0",
+    "vite": "^5.4.0"
+  },
+  "author": "Matt Berg",
+  "bugs": {
+    "url": "https://github.com/mattberg11/pptb-api-explorer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mattberg11/pptb-api-explorer.git"
+  },
+  "keywords": [
+    "dataverse",
+    "power-platform",
+    "sharepoint",
+    "api",
+    "rest",
+    "explorer"
+  ],
+  "main": "index.html"
+}
