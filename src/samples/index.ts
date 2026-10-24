@@ -15,7 +15,15 @@ export function samplesFor(api: string): SampleEndpoint[] {
     return [];
 }
 
-const normalize = (path: string) => decodeURIComponent(path.trim().replace(/^\//, "")).toLowerCase();
+function normalize(path: string): string {
+    const trimmed = path.trim().replace(/^\//, "");
+    // A literal % (e.g. in a filter value) is not a valid escape; compare the raw text then.
+    try {
+        return decodeURIComponent(trimmed).toLowerCase();
+    } catch {
+        return trimmed.toLowerCase();
+    }
+}
 
 export function findSample(api: string, method: HttpMethod, path: string): SampleEndpoint | undefined {
     return samplesFor(api).find((s) => s.api === api && s.method === method && normalize(s.path) === normalize(path));

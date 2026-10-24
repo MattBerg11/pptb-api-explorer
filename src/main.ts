@@ -85,7 +85,10 @@ async function renderList(): Promise<void> {
             try {
                 catalog = await loadCatalog(Number(connSel.value) || 0);
             } catch (err) {
-                list.innerHTML = `<li class="hint error">Could not load metadata: ${String(err)}</li>`;
+                const li = document.createElement("li");
+                li.className = "hint error";
+                li.textContent = `Could not load metadata: ${String(err)}`;
+                list.replaceChildren(li);
                 return;
             }
             list.innerHTML = "";

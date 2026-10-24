@@ -250,6 +250,10 @@ pre {
 }
 
 .docs-foot {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
     color: var(--muted);
     font-size: 11px;
 }
@@ -278,13 +282,6 @@ pre {
 
 .badge[data-kind="delete"] {
     background: #c50f1f;
-}
-
-.docs-foot {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
 }
 
 .docs-foot span {
