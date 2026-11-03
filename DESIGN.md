@@ -29,7 +29,7 @@ The spec for the UI redesign. Code must match the mocks and this file. Nothing b
 ## Layout (the shell)
 ```
 +-------------------------------------------------------------------------------+
-| Top bar 40px: [Dataverse][Power Platform][SharePoint Sample data]   Connection [select] (env) |
+| Top bar 40px: [Dataverse][Power Platform][SharePoint Sample data]               (env badge) |
 +--------------+------------------------------------------------+---------------+
 | Sidebar      | Request: URL row, sub-tabs, editor (236px)     | Rail 300px    |
 | 272px        +------------------------------------------------+ (40px when    |
@@ -49,9 +49,9 @@ Values are from the mock CSS. Sizes in px.
 
 **API tabs (top bar).** Buttons 40 high, padding 0 12, `--fg2`. Active: `--fg1`, weight 600, 3px `--brand` underline inset 12 each side, radius 2. SharePoint carries a "Sample data" tag. Top bar padding 0 12 0 4, gap 16.
 
-**Connection.** Label "Connection" (12px, `--fg3`) + field select (min-width 200) showing `Primary · <name>` / `Secondary · <name>`.
+**Connection.** One optional PPTB connection (Matt, 2026-11-03), so no connection picker. The mock's Connection select is dropped; the environment badge names the connection.
 
-**Environment badge.** Pill 24 high, radius 12, border `--stroke2`, 12px `--fg2`: green dot (8px, `--ok`) + name + ` · <type>` in `--fg3`. Production: `--bad-bg` fill, `--bad-bd` border, `--bad` text, weight 600, warning icon instead of the dot, text `Production · <name>`.
+**Environment badge.** Pill 24 high, radius 12, border `--stroke2`, 12px `--fg2`: green dot (8px, `--ok`) + name + ` · <type>` in `--fg3`. Production: `--bad-bg` fill, `--bad-bd` border, `--bad` text, weight 600, warning icon instead of the dot, text `Production · <name>`. No connection: "No connection" with a `--fg4` dot.
 
 **Tag.** 11px/16px, padding 0 6, radius 4. Sample: `--smp` on `--smp-bg`, border `--smp-bd`. Live: `--ok` family with a 6px dot before the text.
 
@@ -114,6 +114,7 @@ SharePoint: picking an endpoint shows its sample response right away. This repla
 - **Production confirm:** on a Production connection, Send shows the inline confirm bar. Nothing is sent until "Send to Production". Keep the existing rule for when it appears.
 
 ## Not in the mocks (decided here)
+- One optional connection (Matt, 2026-11-03). With no connection: Send is disabled on Dataverse and Power Platform with the tooltip "Connect to an environment in PPTB to send", and the Dataverse `$metadata` groups show one muted line, "Connect to an environment in PPTB to load tables and operations". Power Platform and SharePoint samples still open and show their sample responses.
 - Dataverse sidebar: the curated groups first, then the `$metadata` catalog as groups "Tables", "Functions", "Actions" with counts, collapsed by default. A group renders at most 300 items, then a muted row "N more, refine the search".
 - No endpoint selected: the rail shows one muted line, "Pick an endpoint to see its docs, examples and gotchas."
 - Window under 1100 px wide: the rail starts collapsed.
@@ -163,7 +164,7 @@ export interface EndpointDef {
 Add adapters from the existing sample type and from Dataverse catalog items, with unit tests (ids unique per API, every sample maps with a title and docs link). Don't rewrite the sample data files. No UI change.
 Done when: type + adapters + tests committed, everything green.
 
-**1. Tokens and the 3-column shell.** Import `tokens.css` before `style.css`; remove the old color variables from `style.css`. Restructure `index.html` into top bar + sidebar | main | rail. API tabs replace the API select (Power Platform remembers its last area; until step 3, the PP area picker stays in the URL row on that tab). Connection select and environment badge move to the top bar. The endpoint card moves into the rail, which collapses to 40 px. Inner panels keep today's look; steps 2 to 5 restyle them.
+**1. Tokens and the 3-column shell.** Import `tokens.css` before `style.css`; remove the old color variables from `style.css`. Restructure `index.html` into top bar + sidebar | main | rail. API tabs replace the API select (Power Platform remembers its last area; until step 3, the PP area picker stays in the URL row on that tab). The connection picker goes away (one optional connection); the environment badge sits in the top bar, including the "No connection" state. The endpoint card moves into the rail, which collapses to 40 px. Inner panels keep today's look; steps 2 to 5 restyle them.
 Done when: geometry and colors of the top bar, sidebar, rail and borders match `Main.light.png` and `Main.dark.png`, the theme follows PPTB live, everything green.
 
 **2. Sidebar.** Segmented tabs, search, collapsible groups, items with badges and selection bar, History by day, Saved rename and delete inline, Save opens the new item in rename mode on the Saved tab. Compare: `Main`, `Screen2-Dataverse`.
