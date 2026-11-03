@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>API Explorer, direction B</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.ax{--bg:#ffffff;--bg2:#fafafa;--bg3:#f5f5f5;--bg4:#ebebeb;--hover:#f0f0f0;--sel:#ebf3fc;--stroke:#e0e0e0;--stroke2:#d1d1d1;--fg1:#242424;--fg2:#424242;--fg3:#616161;--fg4:#6e6e6e;--brand:#0f6cbd;--btn:#0f6cbd;--btn-h:#115ea3;--ok:#0e700e;--ok-bg:#f1faf1;--ok-bd:#9fd89f;--smp:#8a3707;--smp-bg:#fff9f5;--smp-bd:#fdcfb4;--bad:#b10e1c;--bad-bg:#fdf3f4;--bad-bd:#eeacb2;--k:#0451a5;--s:#a31515;--n:#098658;--b:#7a2ab0;--p:#616161;--mGET:#0e700e;--mGETb:#f1faf1;--mPOST:#0f6cbd;--mPOSTb:#ebf3fc;--mPATCH:#8a3707;--mPATCHb:#fff9f5;--mPUT:#6b2d9e;--mPUTb:#f7f0fc;--mDELETE:#b10e1c;--mDELETEb:#fdf3f4}
+.ax.dark{--bg:#292929;--bg2:#1f1f1f;--bg3:#333333;--bg4:#3d3d3d;--hover:#383838;--sel:#0c3b5e;--stroke:#3d3d3d;--stroke2:#525252;--fg1:#ffffff;--fg2:#d6d6d6;--fg3:#adadad;--fg4:#9e9e9e;--brand:#479ef5;--btn:#115ea3;--btn-h:#0f6cbd;--ok:#54b054;--ok-bg:#052505;--ok-bd:#107c10;--smp:#faa06b;--smp-bg:#411200;--smp-bd:#8a3707;--bad:#f1707b;--bad-bg:#3b0509;--bad-bd:#a52121;--k:#9cdcfe;--s:#ce9178;--n:#b5cea8;--b:#c586c0;--p:#adadad;--mGET:#54b054;--mGETb:#052505;--mPOST:#479ef5;--mPOSTb:#082338;--mPATCH:#faa06b;--mPATCHb:#411200;--mPUT:#c9a3f0;--mPUTb:#2b1740;--mDELETE:#f1707b;--mDELETEb:#3b0509}
+.ax{font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;font-size:13px;line-height:18px;color:var(--fg1);background:var(--bg)}
+.ax *{box-sizing:border-box}
+.ax button,.ax select,.ax input{font:inherit;color:inherit}
+.mono{font-family:"Cascadia Mono",Consolas,"Courier New",monospace;font-size:12px}
+.muted{color:var(--fg3)}
+.ico{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.top{height:40px;display:flex;align-items:center;gap:16px;padding:0 12px 0 4px;border-bottom:1px solid var(--stroke);background:var(--bg)}
+.apitab{position:relative;height:40px;padding:0 12px;border:0;background:none;color:var(--fg2);display:flex;align-items:center;gap:6px;cursor:pointer}
+.apitab:hover{color:var(--fg1)}
+.apitab.on{color:var(--fg1);font-weight:600}
+.apitab.on::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:3px;border-radius:2px;background:var(--brand)}
+.tag{font-size:11px;line-height:16px;padding:0 6px;border-radius:4px;border:1px solid var(--smp-bd);background:var(--smp-bg);color:var(--smp);font-weight:400;white-space:nowrap}
+.field{height:28px;border:1px solid var(--stroke2);border-bottom-color:var(--fg4);border-radius:4px;background:var(--bg);padding:0 8px}
+.field:focus{outline:2px solid var(--brand);outline-offset:-1px}
+.env{display:flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:12px;border:1px solid var(--stroke2);font-size:12px;color:var(--fg2);white-space:nowrap}
+.env .dot{width:8px;height:8px;border-radius:4px;background:var(--ok)}
+.env.prod{background:var(--bad-bg);border-color:var(--bad-bd);color:var(--bad);font-weight:600}
+.side{border-right:1px solid var(--stroke);background:var(--bg2);display:flex;flex-direction:column;min-height:0}
+.seg{display:flex;gap:2px;padding:2px;margin:8px 8px 6px;background:var(--bg4);border-radius:6px}
+.seg button{flex:1;height:24px;border:0;border-radius:4px;background:none;color:var(--fg2);cursor:pointer}
+.seg button.on{background:var(--bg);color:var(--fg1);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.14)}
+.search{margin:0 8px 6px;display:flex;align-items:center;gap:6px;color:var(--fg3)}
+.search input{border:0;background:none;outline:none;flex:1;min-width:0;color:var(--fg1);height:26px}
+.list{overflow:auto;flex:1;min-height:0;padding:0 4px 8px}
+.grp{font-size:11px;font-weight:600;color:var(--fg3);padding:10px 8px 4px;letter-spacing:.02em}
+.item{width:100%;display:flex;gap:8px;align-items:flex-start;text-align:left;padding:5px 8px;border:0;border-radius:4px;background:none;cursor:pointer;position:relative}
+.item:hover{background:var(--hover)}
+.item.on{background:var(--sel)}
+.item.on::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:2px;background:var(--brand)}
+.itx{display:flex;flex-direction:column;min-width:0;flex:1}
+.itt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.itp{font-family:"Cascadia Mono",Consolas,monospace;font-size:11px;line-height:16px;color:var(--fg4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mb{flex:none;width:46px;height:18px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.03em;display:inline-flex;align-items:center;justify-content:center}
+.m-GET{color:var(--mGET);background:var(--mGETb)}.m-POST{color:var(--mPOST);background:var(--mPOSTb)}.m-PATCH{color:var(--mPATCH);background:var(--mPATCHb)}.m-PUT{color:var(--mPUT);background:var(--mPUTb)}.m-DELETE{color:var(--mDELETE);background:var(--mDELETEb)}
+.ibtn{width:24px;height:24px;border:0;border-radius:4px;background:none;color:var(--fg3);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.ibtn:hover{background:var(--bg4);color:var(--fg1)}
+.saved{display:flex;align-items:center;gap:4px;padding:2px 4px 2px 0;border-radius:4px}
+.saved:hover{background:var(--hover)}
+.saved .item:hover{background:none}
+.inline-confirm{margin:2px 4px 6px 62px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--bad)}
+.btn{height:28px;padding:0 12px;border:1px solid var(--stroke2);border-radius:4px;background:var(--bg);display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;font-weight:600}
+.btn:hover{background:var(--hover)}
+.btn.pri{background:var(--btn);border-color:var(--btn);color:#fff}
+.btn.pri:hover{background:var(--btn-h)}
+.btn.sm{height:24px;padding:0 8px;font-weight:400;font-size:12px}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+.ax.dark .btn.danger{color:#000}
+.urlrow{display:flex;gap:8px;align-items:center;padding:10px 12px}
+.method{height:30px;width:92px;border:1px solid var(--stroke2);border-radius:4px;font-weight:700;padding:0 6px;cursor:pointer}
+.urlbar{flex:1;min-width:0;height:30px;display:flex;align-items:center;border:1px solid var(--stroke2);border-bottom-color:var(--fg4);border-radius:4px;background:var(--bg);padding:0 8px;font-family:"Cascadia Mono",Consolas,monospace;font-size:12px}
+.urlbar:focus-within{outline:2px solid var(--brand);outline-offset:-1px}
+.urlbar .pre{color:var(--fg4);white-space:nowrap}
+.urlbar input{flex:1;min-width:0;border:0;outline:none;background:none;font:inherit;height:28px}
+.tabs{display:flex;gap:4px;padding:0 12px;border-bottom:1px solid var(--stroke);align-items:center}
+.st{position:relative;height:34px;padding:0 8px;border:0;background:none;color:var(--fg2);cursor:pointer;display:flex;align-items:center;gap:6px}
+.st:hover{color:var(--fg1)}
+.st.on{color:var(--fg1);font-weight:600}
+.st.on::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;border-radius:1px;background:var(--brand)}
+.cnt{font-size:11px;line-height:16px;padding:0 5px;border-radius:8px;background:var(--bg4);color:var(--fg2);font-weight:400}
+.code{font-family:"Cascadia Mono",Consolas,"Courier New",monospace;font-size:12px;line-height:19px;white-space:pre}
+.ln{display:flex;align-items:flex-start}
+.num{width:36px;flex:none;text-align:right;padding-right:6px;color:var(--fg4);opacity:.75;user-select:none}
+.fold{width:16px;height:19px;flex:none;border:0;background:none;padding:0;color:var(--fg3);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.fold:hover{color:var(--fg1)}
+.fold svg{width:12px;height:12px;transition:transform .12s}
+.fold.open svg{transform:rotate(90deg)}
+.fsp{width:16px;flex:none}
+.k{color:var(--k)}.s{color:var(--s)}.n{color:var(--n)}.b{color:var(--b)}.p{color:var(--p)}
+.fz{color:var(--fg3);background:var(--bg4);border-radius:3px;padding:0 4px;margin:0 2px;font-size:11px}
+.kv{display:grid;grid-template-columns:24px minmax(0,1fr) minmax(0,1.4fr);border:1px solid var(--stroke);border-radius:4px;margin:10px 12px}
+.kv>div{padding:5px 8px;border-top:1px solid var(--stroke);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kv>.h{border-top:0;font-size:12px;color:var(--fg3);font-weight:600;background:var(--bg2)}
+.pill{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:11px;font-weight:600;font-size:12px;background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-bd)}
+.pill .sub{font-weight:400;opacity:.85}
+.meta{font-size:12px;color:var(--fg3);display:flex;gap:4px;align-items:center}
+.meta b{color:var(--fg1);font-weight:600}
+.empty{margin:24px auto;max-width:380px;text-align:center;color:var(--fg3);display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 16px}
+.empty .ttl{color:var(--fg1);font-weight:600;font-size:14px}
+.chips{display:flex;gap:4px;padding:8px 12px 0;flex-wrap:wrap}
+.chip{height:24px;padding:0 10px;border-radius:12px;border:1px solid var(--stroke2);background:var(--bg);cursor:pointer;font-size:12px}
+.chip.on{background:var(--sel);border-color:var(--brand);color:var(--brand);font-weight:600}
+.strip{margin:0 12px 10px;border:1px solid var(--stroke);border-radius:6px;background:var(--bg2)}
+.strip-head{display:flex;align-items:center;gap:10px;padding:6px 8px 6px 6px;min-height:40px}
+.gotchas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px;padding:2px 12px 4px 38px}
+.gotcha{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:12.5px;line-height:18px;color:var(--fg2)}
+.gotcha .ico{color:var(--smp);margin-top:1px}
+.wcount{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--smp);background:var(--smp-bg);border:1px solid var(--smp-bd);border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap}
+.ax a{color:var(--brand);text-decoration:none}
+.ax a:hover{text-decoration:underline}
+.confirm{margin:0 12px 10px;padding:8px 10px;border-radius:4px;border:1px solid var(--bad-bd);background:var(--bad-bg);color:var(--fg1);display:flex;align-items:center;gap:10px}
+.confirm .ico{color:var(--bad)}
+.pane-lbl{font-size:11px;font-weight:600;color:var(--fg3);letter-spacing:.02em;margin-right:8px}
+</style>
+</helmet>
+<div class="{{rootCls}}" style="width: 100%; height: 900px; display: flex; flex-direction: column; overflow: hidden">
+
+<div class="top">
+<div style="display: flex; align-items: center" role="tablist" aria-label="API">
+<button class="apitab" role="tab">Dataverse</button>
+<button class="apitab on" role="tab" aria-selected="true">Power Platform</button>
+<button class="apitab" role="tab">SharePoint <span class="tag">Sample data</span></button>
+</div>
+<div style="flex: 1"></div>
+<label class="muted" for="connB" style="font-size: 12px">Connection</label>
+<select id="connB" class="field" style="min-width: 200px" value="{{conn}}" onChange="{{onConn}}">
+<option value="primary">Primary · Contoso Dev</option>
+<option value="secondary">Secondary · Contoso Prod</option>
+</select>
+<sc-if value="{{notProd}}" hint-placeholder-val="{{ true }}">
+<span class="env"><span class="dot"></span>Contoso Dev <span class="muted">· Development</span></span>
+</sc-if>
+<sc-if value="{{isProd}}" hint-placeholder-val="{{ false }}">
+<span class="env prod"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg>Production · Contoso Prod</span>
+</sc-if>
+</div>
+
+<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 272px minmax(0, 1fr)">
+
+<aside class="side" aria-label="Endpoint catalog">
+<div class="seg" role="tablist">
+<sc-for list="{{sideTabs}}" as="t" hint-placeholder-count="3">
+<button class="{{t.cls}}" role="tab" onClick="{{t.pick}}">{{t.label}}</button>
+</sc-for>
+</div>
+<div class="search field">
+<svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"></circle><path d="M10.5 10.5 14 14"></path></svg>
+<input aria-label="Search endpoints" placeholder="Search endpoints" value="{{filter}}" onChange="{{onFilter}}">
+</div>
+<div class="list">
+<sc-if value="{{isEndpoints}}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="5">
+<div class="grp">{{g.name}}</div>
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="2">
+<button class="{{it.cls}}" onClick="{{it.pick}}" title="{{it.path}}"><span class="{{it.mcls}}">{{it.m}}</span><span class="itx"><span class="itt">{{it.title}}</span><span class="itp">{{it.path}}</span></span></button>
+</sc-for>
+</sc-for>
+<sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}"><div class="empty"><span>No endpoints match “{{filter}}”.</span></div></sc-if>
+</sc-if>
+<sc-if value="{{isHistory}}" hint-placeholder-val="{{ false }}">
+<div class="grp">Today</div>
+<sc-for list="{{history}}" as="it" hint-placeholder-count="4">
+<button class="item" title="{{it.path}}"><span class="{{it.mcls}}">{{it.m}}</span><span class="itx"><span class="itt">{{it.title}}</span><span class="itp">{{it.meta}}</span></span></button>
+</sc-for>
+</sc-if>
+<sc-if value="{{isSaved}}" hint-placeholder-val="{{ false }}">
+<sc-for list="{{saved}}" as="it" hint-placeholder-count="3">
+<div class="saved">
+<sc-if value="{{it.notEditing}}" hint-placeholder-val="{{ true }}">
+<button class="item" style="flex: 1; min-width: 0" title="{{it.path}}"><span class="{{it.mcls}}">{{it.m}}</span><span class="itx"><span class="itt">{{it.name}}</span><span class="itp">{{it.path}}</span></span></button>
+<button class="ibtn" aria-label="Rename" title="Rename" onClick="{{it.rename}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 2.5l3 3-8 8H2.5v-3z"></path></svg></button>
+<button class="ibtn" aria-label="Delete" title="Delete" onClick="{{it.del}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9"></path></svg></button>
+</sc-if>
+<sc-if value="{{it.isEditing}}" hint-placeholder-val="{{ false }}">
+<span class="{{it.mcls}}" style="margin-left: 8px">{{it.m}}</span>
+<input class="field" style="flex: 1; min-width: 0; height: 26px" aria-label="Saved request name" value="{{draft}}" onChange="{{onDraft}}" onKeyDown="{{it.key}}">
+<button class="ibtn" aria-label="Save name" onClick="{{it.commit}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7"></path></svg></button>
+</sc-if>
+</div>
+<sc-if value="{{it.isConfirm}}" hint-placeholder-val="{{ false }}">
+<div class="inline-confirm">Delete this saved request?<button class="btn sm danger" onClick="{{it.yes}}">Delete</button><button class="btn sm" onClick="{{it.no}}">Cancel</button></div>
+</sc-if>
+</sc-for>
+</sc-if>
+</div>
+</aside>
+
+<main style="display: flex; flex-direction: column; min-width: 0; min-height: 0">
+<div class="urlrow">
+<select class="method m-POST" aria-label="Method"><option>GET</option><option selected>POST</option><option>PATCH</option><option>PUT</option><option>DELETE</option></select>
+<div class="urlbar"><span class="pre">https://api.powerplatform.com/resourcequery/</span><input aria-label="Request path" value="{{url}}" onChange="{{onUrl}}"></div>
+<button class="btn pri" onClick="{{send}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8h10M8.5 4l4 4-4 4"></path></svg>Send</button>
+<button class="btn" onClick="{{save}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-3-4 3z"></path></svg>Save</button>
+</div>
+<sc-if value="{{confirmOpen}}" hint-placeholder-val="{{ false }}">
+<div class="confirm" role="alert"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg><span style="flex: 1">This sends <b>POST</b> to <b>Contoso Prod</b>, a Production environment.</span><button class="btn sm danger" onClick="{{confirmYes}}">Send to Production</button><button class="btn sm" onClick="{{confirmNo}}">Cancel</button></div>
+</sc-if>
+
+<section class="strip" aria-label="Endpoint details">
+<div class="strip-head">
+<button class="ibtn" aria-label="Show or hide endpoint details" onClick="{{toggleCard}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="transform: {{chevRot}}"><path d="M6 4l4 4-4 4"></path></svg></button>
+<span style="font-weight: 600; white-space: nowrap">Inventory query: canvas apps across the tenant</span>
+<span class="muted" style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Queries the tenant inventory and returns canvas apps from every environment.</span>
+<sc-if value="{{cardClosed}}" hint-placeholder-val="{{ false }}"><button class="wcount" style="cursor: pointer" onClick="{{toggleCard}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width: 13px; height: 13px"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg>4 gotchas</button></sc-if>
+<label class="muted" for="exB" style="font-size: 12px">Example</label>
+<select id="exB" class="field" style="height: 26px; max-width: 210px"><option>Canvas apps, first 50</option><option>Canvas apps in one environment</option><option>Canvas apps created this year</option><option>Count apps per environment</option></select>
+<a href="https://learn.microsoft.com/power-platform/admin/inventory-api" target="_blank" style="display: inline-flex; gap: 4px; align-items: center; white-space: nowrap">Microsoft docs <svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width: 14px; height: 14px"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M11.5 9.5v3a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h3"></path></svg></a>
+</div>
+<sc-if value="{{cardOpen}}" hint-placeholder-val="{{ true }}">
+<div class="gotchas">
+<div class="gotcha"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg><span>String values need KQL quotes inside the JSON string: <span class="mono">"'microsoft.powerapps/canvasapps'"</span>.</span></div>
+<div class="gotcha"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg><span>Projected dotted names come back flattened: <span class="mono">properties.displayName</span> becomes <span class="mono">properties_displayName</span>.</span></div>
+<div class="gotcha"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg><span>Delegated user tokens only. Service principals get 403.</span></div>
+<div class="gotcha"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg><span>Page with <span class="mono">Options.SkipToken</span> from the previous response's <span class="mono">skipToken</span>.</span></div>
+</div>
+<div style="padding: 4px 12px 8px 38px; font-size: 12px; color: var(--fg3)">Send makes a live call. The sample is built from Microsoft's documented schema with made-up values.</div>
+</sc-if>
+</section>
+
+<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); border-top: 1px solid var(--stroke)">
+
+<section aria-label="Request" style="display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--stroke)">
+<div class="tabs" role="tablist">
+<span class="pane-lbl">REQUEST</span>
+<sc-for list="{{reqTabs}}" as="t" hint-placeholder-count="3">
+<button class="{{t.cls}}" role="tab" onClick="{{t.pick}}">{{t.label}} <span class="cnt">{{t.count}}</span></button>
+</sc-for>
+</div>
+<div style="flex: 1; min-height: 0; overflow: auto; background: var(--bg2)">
+<sc-if value="{{reqBody}}" hint-placeholder-val="{{ true }}">
+<div class="code" style="padding: 8px 0">
+<sc-for list="{{reqLines}}" as="l" hint-placeholder-count="12">
+<div class="ln"><span class="num">{{l.n}}</span><span class="fsp"></span><span style="padding-left: {{l.pad}}"><sc-for list="{{l.toks}}" as="tk"><span class="{{tk.c}}">{{tk.t}}</span></sc-for></span></div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{reqParams}}" hint-placeholder-val="{{ false }}">
+<div class="kv"><div class="h"></div><div class="h">Key</div><div class="h">Value</div><div><input type="checkbox" checked aria-label="Enabled"></div><div class="mono">api-version</div><div class="mono">2024-10-01</div><div></div><div class="muted">Add parameter</div><div></div></div>
+</sc-if>
+<sc-if value="{{reqHeaders}}" hint-placeholder-val="{{ false }}">
+<div class="kv"><div class="h"></div><div class="h">Key</div><div class="h">Value</div><div><input type="checkbox" checked aria-label="Enabled"></div><div class="mono">Content-Type</div><div class="mono">application/json</div><div><input type="checkbox" checked disabled aria-label="Managed"></div><div class="mono">Authorization</div><div class="muted">Added by your PPTB connection</div></div>
+</sc-if>
+</div>
+</section>
+
+<section aria-label="Response" style="display: flex; flex-direction: column; min-height: 0; min-width: 0">
+<div class="tabs" role="tablist">
+<span class="pane-lbl">RESPONSE</span>
+<sc-for list="{{resTabs}}" as="t" hint-placeholder-count="3">
+<button class="{{t.cls}}" role="tab" onClick="{{t.pick}}">{{t.label}}</button>
+</sc-for>
+<div style="flex: 1"></div>
+<span class="pill">OK <span class="sub">body only</span></span>
+<span class="meta">— ms</span>
+<span class="meta">{{size}}</span>
+<span class="tag">Sample</span>
+<button class="ibtn" aria-label="Copy response" title="{{copyLabel}}" onClick="{{copy}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"></rect><path d="M3 10.5V3.5A1 1 0 0 1 4 2.5h6.5"></path></svg></button>
+</div>
+<div style="flex: 1; min-height: 0; overflow: auto">
+<sc-if value="{{resBody}}" hint-placeholder-val="{{ true }}">
+<div class="code" style="padding: 8px 0">
+<sc-for list="{{resLines}}" as="l" hint-placeholder-count="20">
+<div class="ln"><span class="num">{{l.n}}</span><sc-if value="{{l.hasFold}}" hint-placeholder-val="{{ false }}"><button class="{{l.foldCls}}" onClick="{{l.toggle}}" aria-label="Collapse or expand"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></button></sc-if><sc-if value="{{l.noFold}}" hint-placeholder-val="{{ true }}"><span class="fsp"></span></sc-if><span style="padding-left: {{l.pad}}"><sc-for list="{{l.toks}}" as="tk"><span class="{{tk.c}}">{{tk.t}}</span></sc-for></span></div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{resHeaders}}" hint-placeholder-val="{{ false }}">
+<div class="empty"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width: 24px; height: 24px"><circle cx="8" cy="8" r="6"></circle><path d="M8 7.5v3.5M8 5v.01"></path></svg><span class="ttl">No headers for Power Platform calls</span><span>PPTB returns the response body only. Status code and headers are not available, so the status shows as “OK (body only)”.</span></div>
+</sc-if>
+<sc-if value="{{resCode}}" hint-placeholder-val="{{ false }}">
+<div class="chips">
+<sc-for list="{{langs}}" as="t" hint-placeholder-count="4"><button class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+</div>
+<div class="code" style="padding: 12px 16px; color: var(--fg1)">{{codeText}}</div>
+</sc-if>
+</div>
+</section>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;},&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+function jsonLines(root, folded, onToggle) {
+  var lines = [];
+  function emit(indent, toks, fold, open) { lines.push({ indent: indent, toks: toks, fold: fold, open: open }); }
+  function walk(val, indent, pre, comma, path) {
+    var cm = comma ? [{ t: ',', c: 'p' }] : [];
+    if (val !== null && typeof val === 'object') {
+      var isArr = Array.isArray(val);
+      var entries = isArr ? val.map(function (v, i) { return [null, v]; }) : Object.keys(val).map(function (k) { return [k, val[k]]; });
+      var o = isArr ? '[' : '{', c = isArr ? ']' : '}';
+      if (!entries.length) { emit(indent, pre.concat([{ t: o + c, c: 'p' }], cm)); return; }
+      if (folded[path]) {
+        emit(indent, pre.concat([{ t: o, c: 'p' }, { t: entries.length + (isArr ? ' items' : ' keys'), c: 'fz' }, { t: c, c: 'p' }], cm), path, false);
+        return;
+      }
+      emit(indent, pre.concat([{ t: o, c: 'p' }]), path, true);
+      entries.forEach(function (e, i) {
+        var kt = e[0] === null ? [] : [{ t: JSON.stringify(e[0]), c: 'k' }, { t: ': ', c: 'p' }];
+        walk(e[1], indent + 1, kt, i < entries.length - 1, path + '/' + (e[0] === null ? i : e[0]));
+      });
+      emit(indent, [{ t: c, c: 'p' }].concat(cm));
+    } else {
+      var cls = typeof val === 'string' ? 's' : typeof val === 'number' ? 'n' : 'b';
+      emit(indent, pre.concat([{ t: JSON.stringify(val), c: cls }], cm));
+    }
+  }
+  walk(root, 0, [], false, '');
+  return lines.map(function (l, i) {
+    return {
+      n: i + 1, pad: (l.indent * 16) + 'px', toks: l.toks,
+      hasFold: !!(l.fold !== undefined && onToggle), noFold: !(l.fold !== undefined && onToggle),
+      foldCls: l.open ? 'fold open' : 'fold',
+      toggle: onToggle ? function () { onToggle(l.fold); } : null
+    };
+  });
+}
+
+var BODY = {
+  TableName: 'PowerPlatformResources',
+  Clauses: [
+    { '$type': 'where', FieldName: 'type', Operator: '==', Values: ["'microsoft.powerapps/canvasapps'"] },
+    { '$type': 'project', FieldList: ['name', 'properties.displayName', 'properties.createdAt', 'properties.environmentId'] },
+    { '$type': 'take', TakeCount: 50 }
+  ]
+};
+var RESP = {
+  totalRecords: 3, count: 3, resultTruncated: 0, skipToken: null,
+  data: [
+    { name: '3f1e2d4c-5b6a-4789-8c0d-1e2f3a4b5c6d', properties_displayName: 'Expense Tracker', properties_createdAt: '2025-11-04T15:40:22Z', properties_environmentId: '8a3c2f10-4b7e-4d1a-9c55-2e6f0b1d7a90' },
+    { name: '9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d', properties_displayName: 'Site Inspection', properties_createdAt: '2026-02-19T08:12:40Z', properties_environmentId: '8a3c2f10-4b7e-4d1a-9c55-2e6f0b1d7a90' },
+    { name: '5d4c3b2a-1f0e-4d9c-8b7a-6f5e4d3c2b1a', properties_displayName: 'Onboarding Hub', properties_createdAt: '2026-06-02T11:05:13Z', properties_environmentId: 'c71e0b9d-2f3a-4e8b-a6d4-90f1e2c3b4a5' }
+  ]
+};
+var ENDPOINTS = [
+  { id: 'env-list', g: 'Environment management', m: 'GET', title: 'List environments you can access', path: 'environments?api-version=2024-10-01' },
+  { id: 'env-get', g: 'Environment management', m: 'GET', title: 'Get one environment', path: 'environments/{environmentId}?api-version=2024-10-01' },
+  { id: 'env-groups', g: 'Environment management', m: 'GET', title: 'List environment groups', path: 'environmentGroups?api-version=2024-10-01' },
+  { id: 'apps', g: 'Power Apps', m: 'GET', title: 'List apps in an environment (admin)', path: 'environments/{environmentId}/apps?api-version=2024-10-01' },
+  { id: 'flows', g: 'Power Automate', m: 'GET', title: 'List cloud flows in an environment', path: 'environments/{environmentId}/cloudFlows?api-version=2024-10-01' },
+  { id: 'billing', g: 'Licensing', m: 'GET', title: 'List pay-as-you-go billing policies', path: 'billingPolicies?api-version=2024-10-01' },
+  { id: 'rq-canvas', g: 'Resource query', m: 'POST', title: 'Inventory query: canvas apps across the tenant', path: 'resources/query?api-version=2024-10-01' },
+  { id: 'bot-q', g: 'Copilot Studio', m: 'GET', title: "Get an agent's quarantine status", path: 'environments/{environmentId}/bots/{botId}/api/botQuarantine?api-version=2024-10-01' }
+];
+var HISTORY = [
+  { m: 'POST', title: 'Inventory query: canvas apps across the tenant', meta: 'OK · 412 ms · 10:42', path: 'resources/query?api-version=2024-10-01' },
+  { m: 'GET', title: 'List environments you can access', meta: 'OK · 238 ms · 10:31', path: 'environments?api-version=2024-10-01' },
+  { m: 'GET', title: 'List cloud flows in an environment', meta: 'OK · 655 ms · 09:58', path: 'environments/{environmentId}/cloudFlows' },
+  { m: 'GET', title: 'Get one environment', meta: 'OK · 190 ms · 09:12', path: 'environments/{environmentId}' }
+];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      side: 'endpoints', req: 'body', res: 'body', lang: 'curl', card: true,
+      folded: { '/data/2': true }, sel: 'rq-canvas', filter: '', conn: 'primary',
+      editing: null, draft: '', confirmDel: null, confirmSend: false, copied: false,
+      url: 'resources/query?api-version=2024-10-01',
+      saved: [
+        { id: 's1', name: 'Canvas apps, tenant-wide', m: 'POST', path: 'resources/query?api-version=2024-10-01' },
+        { id: 's2', name: 'Dev environments only', m: 'GET', path: 'environments?api-version=2024-10-01' },
+        { id: 's3', name: 'Flows in Finance env', m: 'GET', path: 'environments/{environmentId}/cloudFlows' }
+      ]
+    };
+  }
+  renderVals() {
+    var S = this.state, self = this;
+    var set = function (o) { self.setState(o); };
+    var theme = this.props.theme ?? 'dark';
+    var q = S.filter.trim().toLowerCase();
+    var groups = [];
+    ENDPOINTS.forEach(function (e) {
+      if (q && (e.title + ' ' + e.path).toLowerCase().indexOf(q) < 0) return;
+      var g = groups.find(function (x) { return x.name === e.g; });
+      if (!g) { g = { name: e.g, items: [] }; groups.push(g); }
+      g.items.push({ m: e.m, title: e.title, path: e.path, mcls: 'mb m-' + e.m, cls: e.id === S.sel ? 'item on' : 'item', pick: function () { set({ sel: e.id }); } });
+    });
+    var tabs = function (list, key) {
+      return list.map(function (t) { return { label: t[1], count: t[2], cls: (S[key] === t[0] ? 'on' : ''), pick: function () { var o = {}; o[key] = t[0]; set(o); } }; });
+    };
+    var sideTabs = tabs([['endpoints', 'Endpoints'], ['history', 'History'], ['saved', 'Saved']], 'side');
+    var reqTabs = tabs([['params', 'Params', '1'], ['headers', 'Headers', '2'], ['body', 'Body', 'JSON']], 'req').map(function (t) { t.cls = 'st ' + t.cls; return t; });
+    var resTabs = tabs([['body', 'Body'], ['headers', 'Headers'], ['code', 'Code']], 'res').map(function (t) { t.cls = 'st ' + t.cls; return t; });
+    var langs = tabs([['curl', 'curl'], ['ps', 'PowerShell'], ['js', 'JavaScript fetch'], ['pptb', 'PPTB tool code']], 'lang').map(function (t) { t.cls = 'chip ' + t.cls; return t; });
+    var full = 'https://api.powerplatform.com/resourcequery/' + S.url;
+    var b1 = JSON.stringify(BODY);
+    var b2 = JSON.stringify(BODY, null, 2);
+    var CODE = {
+      curl: 'curl -X POST "' + full + '" \\\n  -H "Authorization: Bearer $TOKEN" \\\n  -H "Content-Type: application/json" \\\n  -d \'' + b1 + '\'',
+      ps: '$body = @\'\n' + b2 + '\n\'@\n\nInvoke-RestMethod -Method Post `\n  -Uri "' + full + '" `\n  -Headers @{ Authorization = "Bearer $token" } `\n  -ContentType "application/json" `\n  -Body $body',
+      js: 'const res = await fetch("' + full + '", {\n  method: "POST",\n  headers: {\n    Authorization: `Bearer ${token}`,\n    "Content-Type": "application/json",\n  },\n  body: JSON.stringify(' + b2.replace(/\n/g, '\n  ') + '),\n});\nconst data = await res.json();',
+      pptb: '// Auth is handled by the PPTB connection\nconst body = ' + b2 + ';\n\ntry {\n  const result = await window.powerplatformAPI.ResourceQuery.Post(\n    "' + S.url + '",\n    body,\n  );\n  console.log(result.data);\n} catch (error) {\n  console.error(error);\n}'
+    };
+    var saved = S.saved.map(function (s) {
+      var editing = S.editing === s.id;
+      var commit = function () { set({ saved: S.saved.map(function (x) { return x.id === s.id ? Object.assign({}, x, { name: S.draft.trim() || x.name }) : x; }), editing: null }); };
+      return {
+        name: s.name, m: s.m, path: s.path, mcls: 'mb m-' + s.m,
+        isEditing: editing, notEditing: !editing, isConfirm: S.confirmDel === s.id,
+        rename: function () { set({ editing: s.id, draft: s.name, confirmDel: null }); },
+        commit: commit,
+        key: function (e) { if (e.key === 'Enter') commit(); if (e.key === 'Escape') set({ editing: null }); },
+        del: function () { set({ confirmDel: s.id, editing: null }); },
+        yes: function () { set({ saved: S.saved.filter(function (x) { return x.id !== s.id; }), confirmDel: null }); },
+        no: function () { set({ confirmDel: null }); }
+      };
+    });
+    var isProd = S.conn === 'secondary';
+    return {
+      rootCls: 'ax' + (theme === 'dark' ? ' dark' : ''),
+      conn: S.conn, onConn: function (e) { set({ conn: e.target.value, confirmSend: false }); },
+      isProd: isProd, notProd: !isProd,
+      sideTabs: sideTabs, isEndpoints: S.side === 'endpoints', isHistory: S.side === 'history', isSaved: S.side === 'saved',
+      filter: S.filter, onFilter: function (e) { set({ filter: e.target.value }); },
+      groups: groups, noResults: groups.length === 0,
+      history: HISTORY.map(function (h) { return Object.assign({ mcls: 'mb m-' + h.m }, h); }),
+      saved: saved, draft: S.draft, onDraft: function (e) { set({ draft: e.target.value }); },
+      url: S.url, onUrl: function (e) { set({ url: e.target.value }); },
+      send: function () { if (isProd) set({ confirmSend: true }); },
+      confirmOpen: S.confirmSend && isProd,
+      confirmYes: function () { set({ confirmSend: false }); }, confirmNo: function () { set({ confirmSend: false }); },
+      save: function () {
+        var id = 's' + Date.now();
+        set({ saved: [{ id: id, name: 'Inventory query: canvas apps', m: 'POST', path: S.url }].concat(S.saved), side: 'saved', editing: id, draft: 'Inventory query: canvas apps' });
+      },
+      reqTabs: reqTabs, reqBody: S.req === 'body', reqParams: S.req === 'params', reqHeaders: S.req === 'headers',
+      reqLines: jsonLines(BODY, {}, null),
+      resTabs: resTabs, resBody: S.res === 'body', resHeaders: S.res === 'headers', resCode: S.res === 'code',
+      resLines: jsonLines(RESP, S.folded, function (p) { var f = Object.assign({}, S.folded); f[p] = !f[p]; set({ folded: f }); }),
+      size: (JSON.stringify(RESP).length / 1024).toFixed(1) + ' KB',
+      copyLabel: S.copied ? 'Copied' : 'Copy',
+      copy: function () { set({ copied: true }); setTimeout(function () { self.setState({ copied: false }); }, 1400); },
+      langs: langs, codeText: CODE[S.lang],
+      cardOpen: S.card, cardClosed: !S.card, toggleCard: function () { set({ card: !S.card }); },
+      chevRot: S.card ? 'rotate(90deg)' : 'none'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>API Explorer, states</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.ax{--bg:#ffffff;--bg2:#fafafa;--bg4:#ebebeb;--canvas:#f0f0f0;--sel:#ebf3fc;--stroke:#e0e0e0;--stroke2:#d1d1d1;--fg1:#242424;--fg2:#424242;--fg3:#616161;--fg4:#6e6e6e;--brand:#0f6cbd;--btn:#0f6cbd;--ok:#0e700e;--ok-bg:#f1faf1;--ok-bd:#9fd89f;--bad:#b10e1c;--bad-bg:#fdf3f4;--bad-bd:#eeacb2;--k:#0451a5;--s:#a31515;--p:#616161;--mGET:#0e700e;--mGETb:#f1faf1;--mPATCH:#8a3707;--mPATCHb:#fff9f5}
+.ax.dark{--bg:#292929;--bg2:#1f1f1f;--bg4:#3d3d3d;--canvas:#141414;--sel:#0c3b5e;--stroke:#3d3d3d;--stroke2:#525252;--fg1:#ffffff;--fg2:#d6d6d6;--fg3:#adadad;--fg4:#9e9e9e;--brand:#479ef5;--btn:#115ea3;--ok:#54b054;--ok-bg:#052505;--ok-bd:#107c10;--bad:#f1707b;--bad-bg:#3b0509;--bad-bd:#a52121;--k:#9cdcfe;--s:#ce9178;--p:#adadad;--mGET:#54b054;--mGETb:#052505;--mPATCH:#faa06b;--mPATCHb:#411200}
+.ax{font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;font-size:13px;line-height:18px;color:var(--fg1);background:var(--canvas)}
+.ax *{box-sizing:border-box}
+.ax button,.ax input{font:inherit;color:inherit}
+.ico{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.cell{display:flex;flex-direction:column;gap:10px;min-width:0}
+.cell h2{margin:0;font-size:16px;line-height:22px;font-weight:600}
+.cell p{margin:0;color:var(--fg3);font-size:12.5px}
+.frame{height:440px;border:1px solid var(--stroke);border-radius:6px;background:var(--bg);overflow:hidden;display:flex;flex-direction:column}
+.top{height:40px;flex:none;display:flex;align-items:center;gap:12px;padding:0 12px 0 4px;border-bottom:1px solid var(--stroke)}
+.apitab{position:relative;height:40px;padding:0 12px;border:0;background:none;color:var(--fg2);display:flex;align-items:center}
+.apitab.on{color:var(--fg1);font-weight:600}
+.apitab.on::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:3px;border-radius:2px;background:var(--brand)}
+.conn{height:28px;display:flex;align-items:center;padding:0 8px;border:1px solid var(--stroke2);border-radius:4px;font-size:12px;color:var(--fg2);white-space:nowrap}
+.env{display:flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:12px;border:1px solid var(--stroke2);font-size:12px;color:var(--fg2);white-space:nowrap}
+.env .dot{width:8px;height:8px;border-radius:4px;background:var(--ok)}
+.env.prod{background:var(--bad-bg);border-color:var(--bad-bd);color:var(--bad);font-weight:600}
+.urlrow{display:flex;gap:8px;align-items:center;padding:10px 12px}
+.method{height:30px;width:76px;flex:none;border:1px solid var(--stroke2);border-radius:4px;font-weight:700;display:flex;align-items:center;padding:0 8px;font-size:12px}
+.m-GET{color:var(--mGET)}.m-PATCH{color:var(--mPATCH)}
+.urlbar{flex:1;min-width:0;height:30px;display:flex;align-items:center;border:1px solid var(--stroke2);border-bottom-color:var(--fg4);border-radius:4px;padding:0 8px;font-family:"Cascadia Mono",Consolas,monospace;font-size:12px;white-space:nowrap;overflow:hidden}
+.urlbar .pre{color:var(--fg4)}
+.urlbar .ph{color:var(--fg4);font-family:"Segoe UI",sans-serif;font-size:13px}
+.btn{height:28px;padding:0 12px;border:1px solid var(--stroke2);border-radius:4px;background:var(--bg);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-weight:600}
+.btn.pri{background:var(--btn);border-color:var(--btn);color:#fff}
+.btn[disabled]{background:var(--bg4);border-color:var(--bg4);color:var(--fg4)}
+.btn.sm{height:24px;padding:0 8px;font-weight:400;font-size:12px}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff;font-weight:600}
+.ax.dark .btn.danger{color:#000}
+.tabs{display:flex;gap:4px;padding:0 12px;border-bottom:1px solid var(--stroke)}
+.st{position:relative;height:32px;padding:0 8px;border:0;background:none;color:var(--fg2);display:flex;align-items:center}
+.st.on{color:var(--fg1);font-weight:600}
+.st.on::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;border-radius:1px;background:var(--brand)}
+.resbar{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--stroke);min-height:39px}
+.pill{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:11px;font-weight:600;font-size:12px}
+.pill.bad{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-bd)}
+.pill .sub{font-weight:400}
+.meta{font-size:12px;color:var(--fg3)}
+.meta b{color:var(--fg1);font-weight:600}
+.tag{font-size:11px;line-height:16px;padding:0 6px;border-radius:4px;white-space:nowrap}
+.tag.live{border:1px solid var(--ok-bd);background:var(--ok-bg);color:var(--ok)}
+.tag.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:3px;background:var(--ok);margin-right:5px;vertical-align:1px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:var(--fg3);padding:0 40px}
+.empty .ttl{color:var(--fg1);font-weight:600;font-size:14px}
+.code{font-family:"Cascadia Mono",Consolas,"Courier New",monospace;font-size:12px;line-height:19px;white-space:pre;padding:8px 0}
+.num{display:inline-block;width:36px;text-align:right;padding-right:22px;color:var(--fg4);opacity:.75}
+.k{color:var(--k)}.s{color:var(--s)}.p{color:var(--p)}
+.bar{height:2px;background:var(--bg4);position:relative;overflow:hidden}
+.bar::after{content:"";position:absolute;top:0;bottom:0;width:30%;background:var(--brand);animation:slide 1.2s ease-in-out infinite}
+@keyframes slide{0%{left:-30%}100%{left:100%}}
+.sk{height:10px;border-radius:3px;background:var(--bg4);margin:10px 0 0 58px}
+.spin{width:14px;height:14px;border-radius:7px;border:2px solid currentColor;border-right-color:transparent;animation:rot .8s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.confirm{margin:0 12px 10px;padding:8px 10px;border-radius:4px;border:1px solid var(--bad-bd);background:var(--bad-bg);display:flex;align-items:center;gap:10px}
+.confirm .ico{color:var(--bad)}
+</style>
+</helmet>
+<div class="{{rootCls}}" style="width: 1440px; height: 1080px; padding: 40px 48px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 32px; align-content: start">
+
+<div class="cell">
+<div><h2>First open</h2><p>No endpoint picked yet. Send stays off until there is a path.</p></div>
+<div class="frame">
+<div class="top"><button class="apitab on">Dataverse</button><button class="apitab">Power Platform</button><div style="flex: 1"></div><span class="conn">Primary · Contoso Dev</span><span class="env"><span class="dot"></span>Contoso Dev</span></div>
+<div class="urlrow"><span class="method m-GET">GET</span><div class="urlbar"><span class="pre">https://contoso-dev.crm.dynamics.com/api/data/v9.2/</span><span class="ph">Pick an endpoint or type a path</span></div><button class="btn pri" disabled>Send</button></div>
+<div class="tabs"><button class="st">Params</button><button class="st">Headers</button><button class="st on">Body</button></div>
+<div class="empty">
+<svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width: 32px; height: 32px; stroke-width: 1"><path d="M2.5 8h10M8.5 4l4 4-4 4"></path></svg>
+<span class="ttl">No request sent yet</span>
+<span>Pick an endpoint from the catalog, or type a path and press Send. The response, its gotchas and code samples show up here.</span>
+</div>
+</div>
+</div>
+
+<div class="cell">
+<div><h2>Loading</h2><p>Send turns into a spinner. A thin progress bar runs under the response header.</p></div>
+<div class="frame">
+<div class="top"><button class="apitab on">Dataverse</button><button class="apitab">Power Platform</button><div style="flex: 1"></div><span class="conn">Primary · Contoso Dev</span><span class="env"><span class="dot"></span>Contoso Dev</span></div>
+<div class="urlrow"><span class="method m-GET">GET</span><div class="urlbar"><span class="pre">https://contoso-dev.crm.dynamics.com/api/data/v9.2/</span>accounts?$select=name,revenue&amp;$top=3</div><button class="btn pri" disabled><span class="spin" aria-hidden="true"></span>Sending…</button></div>
+<div class="resbar"><span class="meta">Waiting for response…</span><span class="meta">Time <b>1.2 s</b></span></div>
+<div class="bar" role="progressbar" aria-label="Sending request"></div>
+<div style="padding-top: 6px">
+<div class="sk" style="width: 12%"></div>
+<div class="sk" style="width: 62%; margin-left: 74px"></div>
+<div class="sk" style="width: 20%; margin-left: 74px"></div>
+<div class="sk" style="width: 8%; margin-left: 90px"></div>
+<div class="sk" style="width: 48%; margin-left: 106px"></div>
+<div class="sk" style="width: 40%; margin-left: 106px"></div>
+<div class="sk" style="width: 55%; margin-left: 106px"></div>
+<div class="sk" style="width: 6%; margin-left: 90px"></div>
+</div>
+</div>
+</div>
+
+<div class="cell">
+<div><h2>Error response</h2><p>Real status in red, Dataverse error JSON shown as is in the Body tab.</p></div>
+<div class="frame">
+<div class="top"><button class="apitab on">Dataverse</button><button class="apitab">Power Platform</button><div style="flex: 1"></div><span class="conn">Primary · Contoso Dev</span><span class="env"><span class="dot"></span>Contoso Dev</span></div>
+<div class="urlrow"><span class="method m-GET">GET</span><div class="urlbar"><span class="pre">https://contoso-dev.crm.dynamics.com/api/data/v9.2/</span>acounts?$select=name</div><button class="btn pri">Send</button></div>
+<div class="resbar"><span class="pill bad">404 <span class="sub">Not Found</span></span><span class="meta">Time <b>96 ms</b></span><span class="meta">Size <b>0.1 KB</b></span><span class="tag live">Live</span></div>
+<div class="tabs"><button class="st on">Body</button><button class="st">Headers</button><button class="st">Code</button></div>
+<div class="code"><span class="num">1</span><span class="p">{</span>
+<span class="num">2</span>  <span class="k">"error"</span><span class="p">: {</span>
+<span class="num">3</span>    <span class="k">"code"</span><span class="p">: </span><span class="s">"0x80060888"</span><span class="p">,</span>
+<span class="num">4</span>    <span class="k">"message"</span><span class="p">: </span><span class="s">"Resource not found for the segment 'acounts'."</span>
+<span class="num">5</span>  <span class="p">}</span>
+<span class="num">6</span><span class="p">}</span></div>
+</div>
+</div>
+
+<div class="cell">
+<div><h2>Confirm before Production</h2><p>On a Production connection, Send opens an inline bar. Nothing is sent until it is confirmed.</p></div>
+<div class="frame">
+<div class="top"><button class="apitab on">Dataverse</button><button class="apitab">Power Platform</button><div style="flex: 1"></div><span class="conn">Secondary · Contoso Prod</span><span class="env prod"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg>Production</span></div>
+<div class="urlrow"><span class="method m-PATCH">PATCH</span><div class="urlbar"><span class="pre">https://contoso.crm.dynamics.com/api/data/v9.2/</span>accounts(7f2e1a9c-3b4d-ef11-9f89-000d3a5c1b2e)</div><button class="btn pri">Send</button></div>
+<div class="confirm" role="alert"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg><span style="flex: 1">This sends <b>PATCH</b> to <b>Contoso Prod</b>, a Production environment.</span><button class="btn sm danger">Send to Production</button><button class="btn sm">Cancel</button></div>
+<div class="tabs"><button class="st">Params</button><button class="st">Headers</button><button class="st on">Body</button></div>
+<div class="code" style="background: var(--bg2); flex: 1"><span class="num">1</span><span class="p">{</span>
+<span class="num">2</span>  <span class="k">"revenue"</span><span class="p">: </span><span style="color: var(--ok)">90000</span>
+<span class="num">3</span><span class="p">}</span></div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"dark"},"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var theme = this.props.theme ?? 'dark';
+    return { rootCls: 'ax' + (theme === 'dark' ? ' dark' : '') };
+  }
+}
+</script>
+</body>
+</html>

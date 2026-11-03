@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>API Explorer, SharePoint</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.ax{--bg:#ffffff;--bg2:#fafafa;--bg3:#f5f5f5;--bg4:#ebebeb;--hover:#f0f0f0;--sel:#ebf3fc;--stroke:#e0e0e0;--stroke2:#d1d1d1;--fg1:#242424;--fg2:#424242;--fg3:#616161;--fg4:#6e6e6e;--brand:#0f6cbd;--btn:#0f6cbd;--btn-h:#115ea3;--ok:#0e700e;--ok-bg:#f1faf1;--ok-bd:#9fd89f;--smp:#8a3707;--smp-bg:#fff9f5;--smp-bd:#fdcfb4;--bad:#b10e1c;--bad-bg:#fdf3f4;--bad-bd:#eeacb2;--k:#0451a5;--ka:#795e26;--s:#a31515;--n:#098658;--b:#7a2ab0;--p:#616161;--mGET:#0e700e;--mGETb:#f1faf1;--mPOST:#0f6cbd;--mPOSTb:#ebf3fc;--mPATCH:#8a3707;--mPATCHb:#fff9f5;--mPUT:#6b2d9e;--mPUTb:#f7f0fc;--mDELETE:#b10e1c;--mDELETEb:#fdf3f4}
+.ax.dark{--bg:#292929;--bg2:#1f1f1f;--bg3:#333333;--bg4:#3d3d3d;--hover:#383838;--sel:#0c3b5e;--stroke:#3d3d3d;--stroke2:#525252;--fg1:#ffffff;--fg2:#d6d6d6;--fg3:#adadad;--fg4:#9e9e9e;--brand:#479ef5;--btn:#115ea3;--btn-h:#0f6cbd;--ok:#54b054;--ok-bg:#052505;--ok-bd:#107c10;--smp:#faa06b;--smp-bg:#411200;--smp-bd:#8a3707;--bad:#f1707b;--bad-bg:#3b0509;--bad-bd:#a52121;--k:#9cdcfe;--ka:#dcdcaa;--s:#ce9178;--n:#b5cea8;--b:#c586c0;--p:#adadad;--mGET:#54b054;--mGETb:#052505;--mPOST:#479ef5;--mPOSTb:#082338;--mPATCH:#faa06b;--mPATCHb:#411200;--mPUT:#c9a3f0;--mPUTb:#2b1740;--mDELETE:#f1707b;--mDELETEb:#3b0509}
+.ax{font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;font-size:13px;line-height:18px;color:var(--fg1);background:var(--bg)}
+.ax *{box-sizing:border-box}
+.ax button,.ax select,.ax input{font:inherit;color:inherit}
+.mono{font-family:"Cascadia Mono",Consolas,"Courier New",monospace;font-size:12px}
+.muted{color:var(--fg3)}
+.ico{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.top{height:40px;display:flex;align-items:center;gap:16px;padding:0 12px 0 4px;border-bottom:1px solid var(--stroke);background:var(--bg)}
+.apitab{position:relative;height:40px;padding:0 12px;border:0;background:none;color:var(--fg2);display:flex;align-items:center;gap:6px;cursor:pointer}
+.apitab:hover{color:var(--fg1)}
+.apitab.on{color:var(--fg1);font-weight:600}
+.apitab.on::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:3px;border-radius:2px;background:var(--brand)}
+.tag{font-size:11px;line-height:16px;padding:0 6px;border-radius:4px;border:1px solid var(--smp-bd);background:var(--smp-bg);color:var(--smp);font-weight:400;white-space:nowrap}
+.tag.live{border-color:var(--ok-bd);background:var(--ok-bg);color:var(--ok)}
+.tag.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:3px;background:var(--ok);margin-right:5px;vertical-align:1px}
+.field{height:28px;border:1px solid var(--stroke2);border-bottom-color:var(--fg4);border-radius:4px;background:var(--bg);padding:0 8px}
+.field:focus{outline:2px solid var(--brand);outline-offset:-1px}
+.env{display:flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:12px;border:1px solid var(--stroke2);font-size:12px;color:var(--fg2);white-space:nowrap}
+.env .dot{width:8px;height:8px;border-radius:4px;background:var(--ok)}
+.env.prod{background:var(--bad-bg);border-color:var(--bad-bd);color:var(--bad);font-weight:600}
+.side{border-right:1px solid var(--stroke);background:var(--bg2);display:flex;flex-direction:column;min-height:0}
+.seg{display:flex;gap:2px;padding:2px;margin:8px 8px 6px;background:var(--bg4);border-radius:6px}
+.seg button{flex:1;height:24px;border:0;border-radius:4px;background:none;color:var(--fg2);cursor:pointer}
+.seg button.on{background:var(--bg);color:var(--fg1);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.14)}
+.search{margin:0 8px 6px;display:flex;align-items:center;gap:6px;color:var(--fg3)}
+.search input{border:0;background:none;outline:none;flex:1;min-width:0;color:var(--fg1);height:26px}
+.list{overflow:auto;flex:1;min-height:0;padding:0 4px 8px}
+.grp{width:100%;display:flex;align-items:center;gap:6px;border:0;background:none;cursor:pointer;text-align:left;font-size:14px;line-height:20px;font-weight:600;color:var(--fg2);padding:8px 8px 4px;margin-top:4px;border-radius:4px}
+.grp:hover{background:var(--hover);color:var(--fg1)}
+.grp .chev{width:12px;height:12px;color:var(--fg3);transition:transform .12s;transform:rotate(90deg)}
+.grp.shut .chev{transform:none}
+.grp .gc{margin-left:auto;font-weight:400;font-size:11px;color:var(--fg3)}
+.grp-h{font-size:11px;font-weight:600;color:var(--fg3);padding:10px 8px 4px;letter-spacing:.02em}
+.item{width:100%;display:flex;gap:8px;align-items:flex-start;text-align:left;padding:5px 8px;border:0;border-radius:4px;background:none;cursor:pointer;position:relative}
+.item:hover{background:var(--hover)}
+.item.on{background:var(--sel)}
+.item.on::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:2px;background:var(--brand)}
+.itx{display:flex;flex-direction:column;min-width:0;flex:1}
+.itt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.itp{font-family:"Cascadia Mono",Consolas,monospace;font-size:11px;line-height:16px;color:var(--fg4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mb{flex:none;width:46px;height:18px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.03em;display:inline-flex;align-items:center;justify-content:center}
+.m-GET{color:var(--mGET);background:var(--mGETb)}.m-POST{color:var(--mPOST);background:var(--mPOSTb)}.m-PATCH{color:var(--mPATCH);background:var(--mPATCHb)}.m-PUT{color:var(--mPUT);background:var(--mPUTb)}.m-DELETE{color:var(--mDELETE);background:var(--mDELETEb)}
+.ibtn{width:24px;height:24px;border:0;border-radius:4px;background:none;color:var(--fg3);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.ibtn:hover{background:var(--bg4);color:var(--fg1)}
+.saved{display:flex;align-items:center;gap:4px;padding:2px 4px 2px 0;border-radius:4px}
+.saved:hover{background:var(--hover)}
+.saved .item:hover{background:none}
+.inline-confirm{margin:2px 4px 6px 62px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--bad)}
+.btn{height:28px;padding:0 12px;border:1px solid var(--stroke2);border-radius:4px;background:var(--bg);display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;font-weight:600}
+.btn:hover{background:var(--hover)}
+.btn.pri{background:var(--btn);border-color:var(--btn);color:#fff}
+.btn.pri:hover{background:var(--btn-h)}
+.btn[disabled]{background:var(--bg4);border-color:var(--bg4);color:var(--fg4);cursor:not-allowed}
+.btn.sm{height:24px;padding:0 8px;font-weight:400;font-size:12px}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+.ax.dark .btn.danger{color:#000}
+.urlrow{display:flex;gap:8px;align-items:center;padding:10px 12px}
+.method{height:30px;width:92px;border:1px solid var(--stroke2);border-radius:4px;font-weight:700;padding:0 6px;cursor:pointer}
+.urlbar{flex:1;min-width:0;height:30px;display:flex;align-items:center;border:1px solid var(--stroke2);border-bottom-color:var(--fg4);border-radius:4px;background:var(--bg);padding:0 8px;font-family:"Cascadia Mono",Consolas,monospace;font-size:12px}
+.urlbar:focus-within{outline:2px solid var(--brand);outline-offset:-1px}
+.urlbar .pre{color:var(--fg4);white-space:nowrap}
+.urlbar input{flex:1;min-width:0;border:0;outline:none;background:none;font:inherit;height:28px}
+.tabs{display:flex;gap:4px;padding:0 12px;border-bottom:1px solid var(--stroke)}
+.st{position:relative;height:32px;padding:0 8px;border:0;background:none;color:var(--fg2);cursor:pointer;display:flex;align-items:center;gap:6px}
+.st:hover{color:var(--fg1)}
+.st.on{color:var(--fg1);font-weight:600}
+.st.on::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;border-radius:1px;background:var(--brand)}
+.cnt{font-size:11px;line-height:16px;padding:0 5px;border-radius:8px;background:var(--bg4);color:var(--fg2);font-weight:400}
+.code{font-family:"Cascadia Mono",Consolas,"Courier New",monospace;font-size:12px;line-height:19px;white-space:pre}
+.ln{display:flex;align-items:flex-start}
+.num{width:36px;flex:none;text-align:right;padding-right:6px;color:var(--fg4);opacity:.75;user-select:none}
+.fold{width:16px;height:19px;flex:none;border:0;background:none;padding:0;color:var(--fg3);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.fold:hover{color:var(--fg1)}
+.fold svg{width:12px;height:12px;transition:transform .12s}
+.fold.open svg{transform:rotate(90deg)}
+.fsp{width:16px;flex:none}
+.k{color:var(--k)}.ka{color:var(--ka);font-style:italic}.s{color:var(--s)}.n{color:var(--n)}.b{color:var(--b)}.p{color:var(--p)}
+.fz{color:var(--fg3);background:var(--bg4);border-radius:3px;padding:0 4px;margin:0 2px;font-size:11px}
+.kv{border:1px solid var(--stroke);border-radius:4px;margin:10px 12px;overflow:hidden}
+.kvr{display:grid;grid-template-columns:28px minmax(0,1fr) minmax(0,1.6fr);border-top:1px solid var(--stroke)}
+.kvr.two{grid-template-columns:minmax(0,1fr) minmax(0,1.8fr)}
+.kvr:first-child{border-top:0}
+.kvr>div{padding:5px 8px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kvr.h{font-size:12px;color:var(--fg3);font-weight:600;background:var(--bg2)}
+.resbar{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--stroke);flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:11px;font-weight:600;font-size:12px;background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-bd)}
+.pill.bad{background:var(--bad-bg);color:var(--bad);border-color:var(--bad-bd)}
+.pill.smp{background:var(--smp-bg);color:var(--smp);border-color:var(--smp-bd)}
+.pill .sub{font-weight:400;opacity:.85}
+.meta{font-size:12px;color:var(--fg3);display:flex;gap:4px;align-items:center}
+.meta b{color:var(--fg1);font-weight:600}
+.empty{margin:24px auto;max-width:420px;text-align:center;color:var(--fg3);display:flex;flex-direction:column;align-items:center;gap:8px}
+.empty .ttl{color:var(--fg1);font-weight:600;font-size:14px}
+.chips{display:flex;gap:4px;padding:8px 12px 0}
+.chip{height:24px;padding:0 10px;border-radius:12px;border:1px solid var(--stroke2);background:var(--bg);cursor:pointer;font-size:12px}
+.chip.on{background:var(--sel);border-color:var(--brand);color:var(--brand);font-weight:600}
+.rail{border-left:1px solid var(--stroke);background:var(--bg2);display:flex;flex-direction:column;min-height:0}
+.rail h3{margin:0;font-size:14px;line-height:20px;font-weight:600}
+.gotcha{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--stroke);font-size:12.5px;line-height:18px;color:var(--fg2)}
+.gotcha:first-child{border-top:0}
+.gotcha .ico{color:var(--smp);margin-top:1px}
+.lbl{font-size:11px;font-weight:600;color:var(--fg3);letter-spacing:.02em;margin-bottom:4px}
+.ax a{color:var(--brand);text-decoration:none}
+.ax a:hover{text-decoration:underline}
+.confirm{margin:0 12px 10px;padding:8px 10px;border-radius:4px;border:1px solid var(--bad-bd);background:var(--bad-bg);color:var(--fg1);display:flex;align-items:center;gap:10px}
+.confirm .ico{color:var(--bad)}
+.vtext{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;color:var(--fg2);display:flex;align-items:center;gap:6px}
+</style>
+</helmet>
+<div class="{{rootCls}}" style="width: 100%; height: 900px; display: flex; flex-direction: column; overflow: hidden">
+
+<div class="top">
+<div style="display: flex; align-items: center" role="tablist" aria-label="API">
+<button class="{{tabDv}}" role="tab">Dataverse</button>
+<button class="{{tabPp}}" role="tab">Power Platform</button>
+<button class="{{tabSp}}" role="tab">SharePoint <span class="tag">Sample data</span></button>
+</div>
+<div style="flex: 1"></div>
+<label class="muted" for="conn" style="font-size: 12px">Connection</label>
+<select id="conn" class="field" style="min-width: 200px" value="{{conn}}" onChange="{{onConn}}">
+<option value="primary">Primary · Contoso Dev</option>
+<option value="secondary">Secondary · Contoso Prod</option>
+</select>
+<sc-if value="{{notProd}}" hint-placeholder-val="{{ true }}">
+<span class="env"><span class="dot"></span>Contoso Dev <span class="muted">· Development</span></span>
+</sc-if>
+<sc-if value="{{isProd}}" hint-placeholder-val="{{ false }}">
+<span class="env prod"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg>Production · Contoso Prod</span>
+</sc-if>
+</div>
+
+<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: {{cols}}">
+
+<aside class="side" aria-label="Endpoint catalog">
+<div class="seg" role="tablist">
+<sc-for list="{{sideTabs}}" as="t" hint-placeholder-count="3">
+<button class="{{t.cls}}" role="tab" onClick="{{t.pick}}">{{t.label}}</button>
+</sc-for>
+</div>
+<div class="search field">
+<svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"></circle><path d="M10.5 10.5 14 14"></path></svg>
+<input aria-label="Search endpoints" placeholder="{{searchPh}}" value="{{filter}}" onChange="{{onFilter}}">
+</div>
+<div class="list">
+<sc-if value="{{isEndpoints}}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="5">
+<button class="{{g.cls}}" onClick="{{g.toggle}}" aria-expanded="{{g.open}}"><svg class="ico chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg>{{g.name}}<span class="gc">{{g.n}}</span></button>
+<sc-if value="{{g.open}}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="2">
+<button class="{{it.cls}}" onClick="{{it.pick}}" title="{{it.path}}"><span class="{{it.mcls}}">{{it.m}}</span><span class="itx"><span class="itt">{{it.title}}</span><span class="itp">{{it.path}}</span></span></button>
+</sc-for>
+</sc-if>
+</sc-for>
+<sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}"><div class="empty"><span>No endpoints match “{{filter}}”.</span></div></sc-if>
+</sc-if>
+<sc-if value="{{isHistory}}" hint-placeholder-val="{{ false }}">
+<div class="grp-h">Today</div>
+<sc-for list="{{history}}" as="it" hint-placeholder-count="4">
+<button class="item" title="{{it.path}}"><span class="{{it.mcls}}">{{it.m}}</span><span class="itx"><span class="itt">{{it.title}}</span><span class="itp">{{it.meta}}</span></span></button>
+</sc-for>
+</sc-if>
+<sc-if value="{{isSaved}}" hint-placeholder-val="{{ false }}">
+<sc-for list="{{saved}}" as="it" hint-placeholder-count="3">
+<div class="saved">
+<sc-if value="{{it.notEditing}}" hint-placeholder-val="{{ true }}">
+<button class="item" style="flex: 1; min-width: 0" title="{{it.path}}"><span class="{{it.mcls}}">{{it.m}}</span><span class="itx"><span class="itt">{{it.name}}</span><span class="itp">{{it.path}}</span></span></button>
+<button class="ibtn" aria-label="Rename" title="Rename" onClick="{{it.rename}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 2.5l3 3-8 8H2.5v-3z"></path></svg></button>
+<button class="ibtn" aria-label="Delete" title="Delete" onClick="{{it.del}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9"></path></svg></button>
+</sc-if>
+<sc-if value="{{it.isEditing}}" hint-placeholder-val="{{ false }}">
+<span class="{{it.mcls}}" style="margin-left: 8px">{{it.m}}</span>
+<input class="field" style="flex: 1; min-width: 0; height: 26px" aria-label="Saved request name" value="{{draft}}" onChange="{{onDraft}}" onKeyDown="{{it.key}}">
+<button class="ibtn" aria-label="Save name" onClick="{{it.commit}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7"></path></svg></button>
+</sc-if>
+</div>
+<sc-if value="{{it.isConfirm}}" hint-placeholder-val="{{ false }}">
+<div class="inline-confirm">Delete this saved request?<button class="btn sm danger" onClick="{{it.yes}}">Delete</button><button class="btn sm" onClick="{{it.no}}">Cancel</button></div>
+</sc-if>
+</sc-for>
+</sc-if>
+</div>
+</aside>
+
+<main style="display: flex; flex-direction: column; min-width: 0; min-height: 0">
+<section aria-label="Request" style="border-bottom: 1px solid var(--stroke)">
+<div class="urlrow">
+<select class="{{methodCls}}" aria-label="Method" value="{{method}}" onChange="{{noop}}"><option>GET</option><option>POST</option><option>PATCH</option><option>PUT</option><option>DELETE</option></select>
+<div class="urlbar"><span class="pre">{{prefix}}</span><input aria-label="Request path" value="{{url}}" onChange="{{onUrl}}"></div>
+<button class="btn pri" onClick="{{send}}" disabled="{{sendDisabled}}" title="{{sendTitle}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8h10M8.5 4l4 4-4 4"></path></svg>Send</button>
+<button class="btn" onClick="{{save}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-3-4 3z"></path></svg>Save</button>
+</div>
+<sc-if value="{{confirmOpen}}" hint-placeholder-val="{{ false }}">
+<div class="confirm" role="alert"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg><span style="flex: 1">This sends <b>{{method}}</b> to <b>Contoso Prod</b>, a Production environment.</span><button class="btn sm danger" onClick="{{confirmYes}}">Send to Production</button><button class="btn sm" onClick="{{confirmNo}}">Cancel</button></div>
+</sc-if>
+<div class="tabs" role="tablist">
+<sc-for list="{{reqTabs}}" as="t" hint-placeholder-count="3">
+<button class="{{t.cls}}" role="tab" onClick="{{t.pick}}">{{t.label}} <span class="cnt">{{t.count}}</span></button>
+</sc-for>
+</div>
+<div style="height: 236px; overflow: auto; background: var(--bg2)">
+<sc-if value="{{reqBodyJson}}" hint-placeholder-val="{{ false }}">
+<div class="code" style="padding: 8px 0">
+<sc-for list="{{reqLines}}" as="l" hint-placeholder-count="12">
+<div class="ln"><span class="num">{{l.n}}</span><span class="fsp"></span><span style="padding-left: {{l.pad}}"><sc-for list="{{l.toks}}" as="tk"><span class="{{tk.c}}">{{tk.t}}</span></sc-for></span></div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{reqBodyEmpty}}" hint-placeholder-val="{{ false }}">
+<div class="empty"><span>{{bodyEmptyText}}</span></div>
+</sc-if>
+<sc-if value="{{reqParams}}" hint-placeholder-val="{{ true }}">
+<div class="kv">
+<div class="kvr h"><div></div><div>Key</div><div>Value</div></div>
+<sc-for list="{{params}}" as="r" hint-placeholder-count="2"><div class="kvr"><div><input type="checkbox" checked aria-label="Enabled"></div><div class="mono">{{r.k}}</div><div class="mono" title="{{r.v}}">{{r.v}}</div></div></sc-for>
+<div class="kvr"><div></div><div class="muted">Add parameter</div><div></div></div>
+</div>
+</sc-if>
+<sc-if value="{{reqHeaders}}" hint-placeholder-val="{{ false }}">
+<div class="kv">
+<div class="kvr h"><div></div><div>Key</div><div>Value</div></div>
+<sc-for list="{{headers}}" as="r" hint-placeholder-count="4"><div class="kvr"><div><input type="checkbox" checked aria-label="Enabled"></div><div class="mono">{{r.k}}</div><div class="{{r.vc}}" title="{{r.v}}">{{r.v}}</div></div></sc-for>
+</div>
+</sc-if>
+</div>
+</section>
+
+<section aria-label="Response" style="flex: 1; min-height: 0; display: flex; flex-direction: column">
+<div class="resbar">
+<span class="{{pillCls}}">{{status}} <span class="sub">{{statusText}}</span></span>
+<span class="meta">Time <b>{{time}}</b></span>
+<span class="meta">Size <b>{{size}}</b></span>
+<span class="{{modeCls}}">{{modeText}}</span>
+<div style="flex: 1"></div>
+<button class="btn sm" onClick="{{copy}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"></rect><path d="M3 10.5V3.5A1 1 0 0 1 4 2.5h6.5"></path></svg>{{copyLabel}}</button>
+</div>
+<div class="tabs" role="tablist">
+<sc-for list="{{resTabs}}" as="t" hint-placeholder-count="3">
+<button class="{{t.cls}}" role="tab" onClick="{{t.pick}}">{{t.label}}</button>
+</sc-for>
+</div>
+<div style="flex: 1; min-height: 0; overflow: auto">
+<sc-if value="{{resBody}}" hint-placeholder-val="{{ false }}">
+<div class="code" style="padding: 8px 0">
+<sc-for list="{{resLines}}" as="l" hint-placeholder-count="20">
+<div class="ln"><span class="num">{{l.n}}</span><sc-if value="{{l.hasFold}}" hint-placeholder-val="{{ false }}"><button class="{{l.foldCls}}" onClick="{{l.toggle}}" aria-label="Collapse or expand"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></button></sc-if><sc-if value="{{l.noFold}}" hint-placeholder-val="{{ true }}"><span class="fsp"></span></sc-if><span style="padding-left: {{l.pad}}"><sc-for list="{{l.toks}}" as="tk"><span class="{{tk.c}}">{{tk.t}}</span></sc-for></span></div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{resHeaders}}" hint-placeholder-val="{{ false }}">
+<div class="kv">
+<div class="kvr two h"><div>Header</div><div>Value</div></div>
+<sc-for list="{{resHeaderRows}}" as="r" hint-placeholder-count="6"><div class="kvr two"><div class="mono">{{r.k}}</div><div class="mono" title="{{r.v}}">{{r.v}}</div></div></sc-for>
+</div>
+<div style="padding: 0 12px; font-size: 12px; color: var(--fg3)">{{resHeadersNote}}</div>
+</sc-if>
+<sc-if value="{{resCode}}" hint-placeholder-val="{{ true }}">
+<div class="chips">
+<sc-for list="{{langs}}" as="t" hint-placeholder-count="4"><button class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+</div>
+<div class="code" style="padding: 12px 16px; color: var(--fg1)">{{codeText}}</div>
+</sc-if>
+</div>
+</section>
+</main>
+
+<sc-if value="{{cardOpen}}" hint-placeholder-val="{{ true }}">
+<aside class="rail" aria-label="Endpoint details">
+<div style="display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 14px; border-bottom: 1px solid var(--stroke)">
+<span class="lbl" style="margin: 0; flex: 1">ENDPOINT</span>
+<button class="ibtn" aria-label="Collapse endpoint card" title="Collapse" onClick="{{toggleCard}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2.5" width="12" height="11" rx="1.5"></rect><path d="M10 2.5v11"></path></svg></button>
+</div>
+<div style="overflow: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; gap: 6px; align-items: center"><span class="{{card.mcls}}">{{card.m}}</span><span class="{{card.tagCls}}">{{card.tagText}}</span></div>
+<h3>{{card.title}}</h3>
+<div style="color: var(--fg2)">{{card.summary}}</div>
+<a href="{{card.docs}}" target="_blank" style="display: inline-flex; gap: 4px; align-items: center">Microsoft docs <svg class="ico" viewBox="0 0 16 16" aria-hidden="true" style="width: 14px; height: 14px"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M11.5 9.5v3a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h3"></path></svg></a>
+</div>
+<div>
+<label class="lbl" for="ex" style="display: block">EXAMPLES</label>
+<select id="ex" class="field" style="width: 100%"><sc-for list="{{card.examples}}" as="e" hint-placeholder-count="4"><option>{{e}}</option></sc-for></select>
+</div>
+<div>
+<div class="lbl">GOTCHAS <span class="cnt">{{gotchaCount}}</span></div>
+<div>
+<sc-for list="{{gotchas}}" as="g" hint-placeholder-count="3">
+<div class="gotcha"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5 14 13.5H2z"></path><path d="M8 6.5v3M8 11.5v.01"></path></svg><span><sc-for list="{{g.parts}}" as="pt"><span class="{{pt.c}}">{{pt.t}}</span></sc-for></span></div>
+</sc-for>
+</div>
+</div>
+<div style="font-size: 12px; color: var(--fg3); border-top: 1px solid var(--stroke); padding-top: 10px">{{card.note}}</div>
+</div>
+</aside>
+</sc-if>
+<sc-if value="{{cardClosed}}" hint-placeholder-val="{{ false }}">
+<aside class="rail" aria-label="Endpoint details, collapsed" style="align-items: center; padding-top: 8px; gap: 10px">
+<button class="ibtn" aria-label="Expand endpoint card" title="Show endpoint card" onClick="{{toggleCard}}"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2.5" width="12" height="11" rx="1.5"></rect><path d="M10 2.5v11"></path></svg></button>
+<button class="ibtn" style="height: auto; padding: 6px 0" onClick="{{toggleCard}}" aria-label="Show endpoint card and gotchas"><span class="vtext"><span class="cnt" style="background: var(--smp-bg); color: var(--smp)">{{gotchaCount}}</span>Gotchas</span></button>
+</aside>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"dark"},"$preview":{"width":1440,"height":900}}'>
+var SITE = 'https://contoso.sharepoint.com/sites/demo/';
+var ITEMS = "_api/web/lists/getbytitle('Tasks')/items";
+var SEL = 'Id,Title,Status,Due_x0020_Date,AssignedTo/Title,AssignedTo/Email';
+var C = {
+  api: 'sp', method: 'GET', prefix: SITE, url: ITEMS + '?$select=' + SEL + '&$expand=AssignedTo&$top=2',
+  searchPh: 'Search SharePoint endpoints', sel: 'items-person', sendDisabled: true, sendTitle: 'SharePoint is not called live yet',
+  catalog: [
+    { g: 'Site', items: [
+      { id: 'web', m: 'GET', title: 'Get the current site (web)', path: '_api/web?$select=Title,Url,Id,Created,WebTemplate' },
+      { id: 'me', m: 'GET', title: 'Get the signed-in user', path: '_api/web/currentuser?$select=Id,Title,Email,LoginName' },
+      { id: 'users', m: 'GET', title: 'List users known to the site', path: '_api/web/siteusers?$select=Id,Title,Email' },
+      { id: 'digest', m: 'POST', title: 'Get a form digest (X-RequestDigest)', path: '_api/contextinfo' }
+    ] },
+    { g: 'Lists', items: [
+      { id: 'lists', m: 'GET', title: 'List visible lists and libraries', path: '_api/web/lists?$select=Id,Title,ItemCount&$filter=Hidden eq false' },
+      { id: 'fields', m: 'GET', title: 'List editable columns of a list', path: "_api/web/lists/getbytitle('Tasks')/fields?$filter=ReadOnlyField eq false" }
+    ] },
+    { g: 'Items', items: [
+      { id: 'items-person', m: 'GET', title: 'Get list items, including a person field', path: ITEMS + '?$select=' + SEL + '&$expand=AssignedTo' },
+      { id: 'caml', m: 'POST', title: 'Query items with CAML', path: "_api/web/lists/getbytitle('Tasks')/GetItems" },
+      { id: 'create', m: 'POST', title: 'Create a list item', path: ITEMS },
+      { id: 'update', m: 'PATCH', title: 'Update a list item', path: ITEMS + '(1)' },
+      { id: 'delete', m: 'DELETE', title: 'Delete a list item (permanent)', path: ITEMS + '(1)' }
+    ] },
+    { g: 'Files', items: [
+      { id: 'files', m: 'GET', title: 'List files in a folder', path: "_api/web/GetFolderByServerRelativeUrl('Shared Documents')/Files" },
+      { id: 'download', m: 'GET', title: 'Download file content', path: "_api/web/GetFileByServerRelativeUrl('/sites/demo/Shared Documents/report.docx')/$value" },
+      { id: 'upload', m: 'POST', title: 'Upload a small file', path: "_api/web/GetFolderByServerRelativeUrl('Shared Documents')/Files/add(url='notes.txt',overwrite=true)" }
+    ] },
+    { g: 'Search', items: [
+      { id: 'search', m: 'GET', title: 'Search the site', path: "_api/search/query?querytext='budget'" }
+    ] }
+  ],
+  history: [
+    { m: 'GET', title: 'Get list items, including a person field', meta: '200 sample · 11:20' },
+    { m: 'GET', title: 'Get the signed-in user', meta: '200 sample · 11:14' },
+    { m: 'POST', title: 'Get a form digest (X-RequestDigest)', meta: '200 sample · 11:09' }
+  ],
+  saved: [
+    { id: 's1', name: 'Tasks with assignee', m: 'GET', path: ITEMS + '?$expand=AssignedTo' },
+    { id: 's2', name: 'Site info', m: 'GET', path: '_api/web?$select=Title,Url' }
+  ],
+  req: 'params', body: null, bodyEmpty: 'GET requests don’t send a body.',
+  params: [['$select', SEL], ['$expand', 'AssignedTo'], ['$top', '2']],
+  headers: [['Accept', 'application/json;odata=nometadata'], ['Authorization', 'Not sent: sample data only', true]],
+  card: {
+    m: 'GET', title: 'Get list items, including a person field', tagCls: 'tag', tagText: 'Sample only',
+    summary: 'Reads items from the Tasks list and expands the AssignedTo person column.',
+    docs: 'https://learn.microsoft.com/sharepoint/dev/sp-add-ins/working-with-lists-and-list-items-with-rest',
+    examples: ['Two items with assignee', 'Filter by status', 'Order by due date', 'Items assigned to me'],
+    gotchas: [
+      'Person and lookup fields need `$expand` plus `$select` of the sub-properties. Without them you only get `AssignedToId`.',
+      'Paging: follow `odata.nextLink`. `$skip` is ignored on list items.',
+      'Dates are returned in UTC.'
+    ],
+    note: 'Sample data. SharePoint is not called live yet, so Send is off for this API.'
+  },
+  res: {
+    pillCls: 'pill smp', status: '200', statusText: 'sample', time: '—', modeCls: 'tag', modeText: 'Sample', tab: 'code',
+    folded: {},
+    json: {
+      'odata.nextLink': SITE + "_api/web/lists/getbytitle('Tasks')/items?%24skiptoken=Paged%3dTRUE%26p_ID%3d2&%24top=2",
+      value: [
+        { AssignedTo: { Email: 'megan@contoso.com', Title: 'Megan Bowen' }, Due_x0020_Date: '2026-10-31T07:00:00Z', Id: 1, ID: 1, Status: 'In progress', Title: 'Draft launch plan' },
+        { AssignedTo: { Email: 'alex@contoso.com', Title: 'Alex Wilber' }, Due_x0020_Date: null, Id: 2, ID: 2, Status: 'Not started', Title: 'Review budget' }
+      ]
+    },
+    headers: [
+      ['Content-Type', 'application/json;odata=nometadata;streaming=true;charset=utf-8'],
+      ['SPRequestGuid', '7c3e9fa1-0b42-4d6e-a5c1-2f8d9e0b1c37'],
+      ['X-SharePointHealthScore', '0'],
+      ['Date', 'Sat, 31 Oct 2026 11:20:05 GMT']
+    ],
+    headersNote: 'Sample headers. Real values appear once SharePoint calls go live.'
+  },
+  lang: 'curl',
+  code: {
+    curl: [
+      'curl -G "' + SITE + ITEMS + '" \\',
+      "  --data-urlencode '$select=" + SEL + "' \\",
+      "  --data-urlencode '$expand=AssignedTo' \\",
+      "  --data-urlencode '$top=2' \\",
+      '  -H "Accept: application/json;odata=nometadata" \\',
+      '  -H "Authorization: Bearer $TOKEN"'
+    ].join('\n'),
+    ps: [
+      '$uri = "' + SITE + ITEMS + '" +',
+      '  "?`$select=' + SEL + '&`$expand=AssignedTo&`$top=2"',
+      '',
+      'Invoke-RestMethod -Uri $uri -Headers @{',
+      '  Authorization = "Bearer $token"',
+      '  Accept        = "application/json;odata=nometadata"',
+      '}'
+    ].join('\n'),
+    js: [
+      'const url = "' + SITE + ITEMS + '"',
+      '  + "?$select=' + SEL + '"',
+      '  + "&$expand=AssignedTo&$top=2";',
+      '',
+      'const res = await fetch(url, {',
+      '  headers: {',
+      '    Authorization: `Bearer ${token}`,',
+      '    Accept: "application/json;odata=nometadata",',
+      '  },',
+      '});',
+      'const data = await res.json();'
+    ].join('\n'),
+    pptb: [
+      '// Not available yet.',
+      '// PPTB doesn’t expose a SharePoint API, so this endpoint',
+      '// runs on sample data only.'
+    ].join('\n')
+  }
+};
+
+function jsonLines(root, folded, onToggle) {
+  var lines = [];
+  function emit(indent, toks, fold, open) { lines.push({ indent: indent, toks: toks, fold: fold, open: open }); }
+  function walk(val, indent, pre, comma, path) {
+    var cm = comma ? [{ t: ',', c: 'p' }] : [];
+    if (val !== null && typeof val === 'object') {
+      var isArr = Array.isArray(val);
+      var entries = isArr ? val.map(function (v) { return [null, v]; }) : Object.keys(val).map(function (k) { return [k, val[k]]; });
+      var o = isArr ? '[' : '{', c = isArr ? ']' : '}';
+      if (!entries.length) { emit(indent, pre.concat([{ t: o + c, c: 'p' }], cm)); return; }
+      if (folded[path]) {
+        emit(indent, pre.concat([{ t: o, c: 'p' }, { t: entries.length + (isArr ? ' items' : ' keys'), c: 'fz' }, { t: c, c: 'p' }], cm), path, false);
+        return;
+      }
+      emit(indent, pre.concat([{ t: o, c: 'p' }]), path, true);
+      entries.forEach(function (e, i) {
+        var kt = e[0] === null ? [] : [{ t: JSON.stringify(e[0]), c: e[0].indexOf('@') >= 0 ? 'ka' : 'k' }, { t: ': ', c: 'p' }];
+        walk(e[1], indent + 1, kt, i < entries.length - 1, path + '/' + (e[0] === null ? i : e[0]));
+      });
+      emit(indent, [{ t: c, c: 'p' }].concat(cm));
+    } else {
+      var cls = typeof val === 'string' ? 's' : typeof val === 'number' ? 'n' : 'b';
+      emit(indent, pre.concat([{ t: JSON.stringify(val), c: cls }], cm));
+    }
+  }
+  walk(root, 0, [], false, '');
+  return lines.map(function (l, i) {
+    var f = l.fold !== undefined && !!onToggle;
+    return { n: i + 1, pad: (l.indent * 16) + 'px', toks: l.toks, hasFold: f, noFold: !f, foldCls: l.open ? 'fold open' : 'fold', toggle: f ? function () { onToggle(l.fold); } : null };
+  });
+}
+function parts(s) { return s.split('`').map(function (t, i) { return { t: t, c: i % 2 ? 'mono' : '' }; }); }
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      shut: {}, side: 'endpoints', req: C.req, res: C.res.tab, lang: C.lang, card: true,
+      folded: C.res.folded, sel: C.sel, filter: '', conn: 'primary',
+      editing: null, draft: '', confirmDel: null, confirmSend: false, copied: false,
+      url: C.url, saved: C.saved
+    };
+  }
+  renderVals() {
+    var S = this.state, self = this;
+    var set = function (o) { self.setState(o); };
+    var theme = this.props.theme ?? 'dark';
+    var q = S.filter.trim().toLowerCase();
+    var groups = [];
+    C.catalog.forEach(function (grp) {
+      var items = grp.items.filter(function (e) { return !q || (e.title + ' ' + e.path).toLowerCase().indexOf(q) >= 0; });
+      if (!items.length) return;
+      groups.push({ name: grp.g, count: grp.count || '', items: items.map(function (e) {
+        return { m: e.m, title: e.title, path: e.path, mcls: 'mb m-' + e.m, cls: e.id === S.sel ? 'item on' : 'item', pick: function () { set({ sel: e.id }); } };
+      }) });
+    });
+    groups.forEach(function (g) {
+      var open = !!q || !S.shut[g.name];
+      g.open = open; g.n = g.items.length; g.cls = 'grp' + (open ? '' : ' shut');
+      g.toggle = function () { var s = Object.assign({}, S.shut); s[g.name] = !s[g.name]; set({ shut: s }); };
+    });
+    var tabs = function (list, key, base) {
+      return list.map(function (t) { return { label: t[1], count: t[2], cls: base + (S[key] === t[0] ? ' on' : ''), pick: function () { var o = {}; o[key] = t[0]; set(o); } }; });
+    };
+    var saved = S.saved.map(function (s) {
+      var editing = S.editing === s.id;
+      var commit = function () { set({ saved: S.saved.map(function (x) { return x.id === s.id ? Object.assign({}, x, { name: S.draft.trim() || x.name }) : x; }), editing: null }); };
+      return {
+        name: s.name, m: s.m, path: s.path, mcls: 'mb m-' + s.m,
+        isEditing: editing, notEditing: !editing, isConfirm: S.confirmDel === s.id,
+        rename: function () { set({ editing: s.id, draft: s.name, confirmDel: null }); },
+        commit: commit,
+        key: function (e) { if (e.key === 'Enter') commit(); if (e.key === 'Escape') set({ editing: null }); },
+        del: function () { set({ confirmDel: s.id, editing: null }); },
+        yes: function () { set({ saved: S.saved.filter(function (x) { return x.id !== s.id; }), confirmDel: null }); },
+        no: function () { set({ confirmDel: null }); }
+      };
+    });
+    var isProd = S.conn === 'secondary';
+    var hasBody = !!C.body;
+    return {
+      rootCls: 'ax' + (theme === 'dark' ? ' dark' : ''),
+      tabDv: 'apitab' + (C.api === 'dv' ? ' on' : ''), tabPp: 'apitab' + (C.api === 'pp' ? ' on' : ''), tabSp: 'apitab' + (C.api === 'sp' ? ' on' : ''),
+      cols: S.card ? '272px minmax(0, 1fr) 300px' : '272px minmax(0, 1fr) 40px',
+      conn: S.conn, onConn: function (e) { set({ conn: e.target.value, confirmSend: false }); },
+      isProd: isProd, notProd: !isProd,
+      sideTabs: tabs([['endpoints', 'Endpoints'], ['history', 'History'], ['saved', 'Saved']], 'side', ''),
+      isEndpoints: S.side === 'endpoints', isHistory: S.side === 'history', isSaved: S.side === 'saved',
+      searchPh: C.searchPh, filter: S.filter, onFilter: function (e) { set({ filter: e.target.value }); },
+      groups: groups, noResults: groups.length === 0,
+      history: C.history.map(function (h) { return Object.assign({ mcls: 'mb m-' + h.m, path: h.title }, h); }),
+      saved: saved, draft: S.draft, onDraft: function (e) { set({ draft: e.target.value }); },
+      method: C.method, methodCls: 'method m-' + C.method, noop: function () {},
+      prefix: C.prefix, url: S.url, onUrl: function (e) { set({ url: e.target.value }); },
+      sendDisabled: C.sendDisabled, sendTitle: C.sendTitle,
+      send: function () { if (isProd) set({ confirmSend: true }); },
+      confirmOpen: S.confirmSend && isProd,
+      confirmYes: function () { set({ confirmSend: false }); }, confirmNo: function () { set({ confirmSend: false }); },
+      save: function () {
+        var id = 's' + Date.now();
+        set({ saved: [{ id: id, name: C.card.title, m: C.method, path: S.url }].concat(S.saved), side: 'saved', editing: id, draft: C.card.title });
+      },
+      reqTabs: tabs([['params', 'Params', String(C.params.length)], ['headers', 'Headers', String(C.headers.length)], ['body', 'Body', hasBody ? 'JSON' : 'None']], 'req', 'st'),
+      reqBodyJson: S.req === 'body' && hasBody, reqBodyEmpty: S.req === 'body' && !hasBody, bodyEmptyText: C.bodyEmpty,
+      reqParams: S.req === 'params', reqHeaders: S.req === 'headers',
+      params: C.params.map(function (r) { return { k: r[0], v: r[1] }; }),
+      headers: C.headers.map(function (r) { return { k: r[0], v: r[1], vc: r[2] ? 'muted' : 'mono' }; }),
+      reqLines: hasBody ? jsonLines(C.body, {}, null) : [],
+      pillCls: C.res.pillCls, status: C.res.status, statusText: C.res.statusText, time: C.res.time,
+      modeCls: C.res.modeCls, modeText: C.res.modeText,
+      resTabs: tabs([['body', 'Body'], ['headers', 'Headers'], ['code', 'Code']], 'res', 'st'),
+      resBody: S.res === 'body', resHeaders: S.res === 'headers', resCode: S.res === 'code',
+      resHeaderRows: C.res.headers.map(function (r) { return { k: r[0], v: r[1] }; }), resHeadersNote: C.res.headersNote,
+      resLines: jsonLines(C.res.json, S.folded, function (p) { var f = Object.assign({}, S.folded); f[p] = !f[p]; set({ folded: f }); }),
+      size: (JSON.stringify(C.res.json).length / 1024).toFixed(1) + ' KB',
+      copyLabel: S.copied ? 'Copied' : 'Copy',
+      copy: function () { set({ copied: true }); setTimeout(function () { self.setState({ copied: false }); }, 1400); },
+      langs: tabs([['curl', 'curl'], ['ps', 'PowerShell'], ['js', 'JavaScript fetch'], ['pptb', 'PPTB tool code']], 'lang', 'chip'),
+      codeText: C.code[S.lang],
+      card: Object.assign({ mcls: 'mb m-' + C.card.m }, C.card),
+      gotchas: C.card.gotchas.map(function (g) { return { parts: parts(g) }; }), gotchaCount: C.card.gotchas.length,
+      cardOpen: S.card, cardClosed: !S.card, toggleCard: function () { set({ card: !S.card }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
